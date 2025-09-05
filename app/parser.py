@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import fake_useragent
 
-def parse(html):
+def parse_bs(html) -> str:
     soup = BeautifulSoup(html, "lxml")
     res = soup.find("ins", class_='priceBlockFinalPrice--iToZR').text
     return res
@@ -34,8 +34,12 @@ def parse_selenium(article):
 
     wait.until(EC.presence_of_element_located((By.CLASS_NAME, "priceBlockFinalPrice--iToZR")))
 
-    return parse(driver.page_source)
+    return driver.page_source
+
+def parser(article) -> str:
+    html = parse_selenium(article)
+    return parse_bs(html)
 
 if __name__ == "__main__":
     article = int(input('Введите артикул:\n'))
-    print(f'Цена - {parse_selenium(article)}')
+    print(f'Цена - {parser(article)}')
