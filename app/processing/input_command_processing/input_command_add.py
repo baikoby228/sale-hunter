@@ -40,7 +40,7 @@ def input_command_add_processing(message):
                 text = 'Товар с эти артикулом уже отслеживается'
                 bot.send_message(chat_id, text, parse_mode='html')
             elif get_targets_amount(user_id) == MAX_AMOUNT_OF_TARGETS:
-                text = f'Достигнут лимит в {MAX_AMOUNT_OF_TARGETS} отслеживаемых товаров'
+                text = f'Достигнут лимит отслеживаемых товаров ({MAX_AMOUNT_OF_TARGETS})'
                 bot.send_message(chat_id, text, parse_mode='html')
             else:
                 text = 'Получение текущей цены товара...'

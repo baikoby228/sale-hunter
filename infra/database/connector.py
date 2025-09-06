@@ -80,7 +80,5 @@ def check_target(user_id: int, article: str) -> bool:
 def get_targets_amount(user_id: int) -> int:
     return len(get_targets(user_id))
 
-'''
 if __name__ == '__main__':
     create_db()
-'''

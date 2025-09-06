@@ -3,7 +3,9 @@ import telebot
 from dotenv import load_dotenv
 import os
 
-from app import input_processing, processing_command_start, processing_command_add, processing_callback_add_marketplace
+from app import (input_processing, processing_command_start, processing_command_add,
+                 processing_callback_add_marketplace, processing_command_del, processing_callback_del_marketplace)
+from print_all import print_all_processing
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -18,9 +20,23 @@ def command_start_handler(message) -> None:
 def command_start_handler(message) -> None:
     processing_command_add(message)
 
-@bot.callback_query_handler(func=lambda callback: callback.data in ['wb'])
+@bot.message_handler(commands=['del'])
+def command_start_handler(message) -> None:
+    processing_command_del(message)
+
+'''
+@bot.message_handler(commands=['all'])
+def command_start_handler(message) -> None:
+    print_all_processing(message)
+'''
+
+@bot.callback_query_handler(func=lambda callback: callback.data in ['add_wb'])
 def callback_add_marketplace_handler(callback) -> None:
     processing_callback_add_marketplace(callback)
+
+@bot.callback_query_handler(func=lambda callback: callback.data in ['del_wb'])
+def callback_del_marketplace_handler(callback) -> None:
+    processing_callback_del_marketplace(callback)
 
 @bot.message_handler(content_types=['text'])
 def input_text(message):
