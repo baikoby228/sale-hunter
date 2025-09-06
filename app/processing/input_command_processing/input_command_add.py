@@ -23,7 +23,7 @@ def input_command_add_processing(message):
 
     match current_step:
         case 0:
-            user.marketplaces[user.current_marketplace].article = find_number(message.text)
+            user.article = find_number(message.text)
             text = (
                 'Введите максимальную подходящую цену товара для оповещения\n'
                 'Примеры ввода:\n178,32 р.\n9.00 BYN\n41,00'
@@ -31,12 +31,9 @@ def input_command_add_processing(message):
             bot.send_message(chat_id, text, parse_mode='html')
             user.step += 1
         case 1:
-            user.marketplaces[user.current_marketplace].max_price = find_number(message.text)
+            user.max_price = find_number(message.text)
 
-            article = user.marketplaces[user.current_marketplace].article
-            max_price = user.marketplaces[user.current_marketplace].max_price
-
-            if check_target(user_id, article):
+            if check_target(user_id, user.article):
                 text = 'Товар с эти артикулом уже отслеживается'
                 bot.send_message(chat_id, text, parse_mode='html')
             elif get_targets_amount(user_id) == MAX_AMOUNT_OF_TARGETS:
@@ -46,12 +43,12 @@ def input_command_add_processing(message):
                 text = 'Получение текущей цены товара...'
                 bot.send_message(chat_id, text, parse_mode='html')
 
-                current_price = find_number(wb_parser(article))
-                if current_price <= max_price:
+                current_price = find_number(wb_parser(user.article))
+                if current_price <= user.max_price:
                     text = 'Товар на данный момент стоит меньше максимальной цены'
                     bot.send_message(chat_id, text, parse_mode='html')
                 else:
-                    add_target(user_id, article, max_price)
+                    add_target(user_id, user.article, user.max_price)
                     text = 'Товар добавлен в список отслеживаемых'
                     bot.send_message(chat_id, text, parse_mode='html')
 

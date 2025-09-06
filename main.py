@@ -20,7 +20,7 @@ def command_start_handler(message) -> None:
 def command_start_handler(message) -> None:
     processing_command_add(message)
 
-@bot.message_handler(commands=['del'])
+@bot.message_handler(commands=['remove'])
 def command_start_handler(message) -> None:
     processing_command_del(message)
 

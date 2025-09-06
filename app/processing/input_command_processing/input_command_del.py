@@ -21,12 +21,10 @@ def input_command_del_processing(message):
 
     match current_step:
         case 0:
-            user.marketplaces[user.current_marketplace].article = find_number(message.text)
+            user.article = find_number(message.text)
 
-            article = user.marketplaces[user.current_marketplace].article
-
-            if check_target(user_id, article):
-                del_target(user_id, article)
+            if check_target(user_id, user.article):
+                del_target(user_id, user.article)
                 text = 'Товар удалён из списка отслеживаемых'
                 bot.send_message(chat_id, text, parse_mode='html')
             else:

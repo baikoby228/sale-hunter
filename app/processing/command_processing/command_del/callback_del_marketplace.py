@@ -3,7 +3,7 @@ import telebot
 from dotenv import load_dotenv
 import os
 
-from ....user_session import get_user_session, Marketplace
+from ....user_session import get_user_session
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -15,9 +15,6 @@ def processing_callback_del_marketplace(callback) -> None:
     chat_id = callback.message.chat.id
 
     data = get_user_session(user_id)
-    data.current_marketplace = callback.data[4:]
-    print(f'cur mp = {callback.data[4:]}')
-    data.marketplaces[data.current_marketplace] = Marketplace()
     data.step = 0
 
     text = 'Введите артикул товара'
