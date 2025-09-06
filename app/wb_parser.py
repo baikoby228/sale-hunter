@@ -36,10 +36,10 @@ def parse_selenium(article):
 
     return driver.page_source
 
-def parser(article) -> str:
+def wb_parser(article) -> str:
     html = parse_selenium(article)
     return parse_bs(html)
 
 if __name__ == "__main__":
     article = int(input('Введите артикул:\n'))
-    print(f'Цена - {parser(article)}')
+    print(f'Цена - {wb_parser(article)}')

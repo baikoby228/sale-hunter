@@ -1,3 +1,4 @@
+from .input_processing import input_processing
 from .command_processing import processing_command_start
 from .command_processing import processing_command_add, processing_callback_add_marketplace
 

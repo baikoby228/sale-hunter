@@ -1,7 +1,6 @@
 class UserData:
-    marketplace: str
-    article: int
-    max_price: int
+    current_marketplace: str
 
     def __init__(self) -> None:
         self.step = -1
+        self.marketplaces = {}
