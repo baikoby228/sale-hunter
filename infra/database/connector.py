@@ -77,6 +77,19 @@ def check_target(user_id: int, article: str) -> bool:
 
     return res is not None
 
+def set_target_max_price(user_id: int, article: int, new_max_price: int):
+    db = sqlite3.connect(Path(__file__).parent / 'user_data_base.db')
+    c = db.cursor()
+
+    c.execute("""
+        UPDATE targets
+        SET max_price = ?
+        WHERE user_id = ? AND article = ?
+    """, (new_max_price, user_id, article))
+
+    db.commit()
+    db.close()
+
 def get_targets_amount(user_id: int) -> int:
     return len(get_targets(user_id))
 

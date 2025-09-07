@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 import os
 
 from app import (input_processing, processing_command_start, processing_command_add,
-                 processing_callback_add_marketplace, processing_command_del, processing_callback_del_marketplace)
+                 processing_callback_add_marketplace, processing_command_del, processing_callback_del_marketplace,
+                 processing_command_set, processing_callback_set_marketplace)
 from print_all import print_all_processing
 
 load_dotenv()
@@ -24,6 +25,10 @@ def command_start_handler(message) -> None:
 def command_start_handler(message) -> None:
     processing_command_del(message)
 
+@bot.message_handler(commands=['change'])
+def command_start_handler(message) -> None:
+    processing_command_set(message)
+
 '''
 @bot.message_handler(commands=['all'])
 def command_start_handler(message) -> None:
@@ -37,6 +42,10 @@ def callback_add_marketplace_handler(callback) -> None:
 @bot.callback_query_handler(func=lambda callback: callback.data in ['del_wb'])
 def callback_del_marketplace_handler(callback) -> None:
     processing_callback_del_marketplace(callback)
+
+@bot.callback_query_handler(func=lambda callback: callback.data in ['set_wb'])
+def callback_set_marketplace_handler(callback) -> None:
+    processing_callback_set_marketplace(callback)
 
 @bot.message_handler(content_types=['text'])
 def input_text(message):

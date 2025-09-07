@@ -15,7 +15,7 @@ def processing_command_add(message) -> None:
     user_id = message.from_user.id
     chat_id = message.chat.id
 
-    data = create_user_session(user_id, 'add')
+    data = create_user_session(user_id, 'add', 0)
 
     markup = types.InlineKeyboardMarkup(row_width=1)
     button_wb = types.InlineKeyboardButton('Wildberries', callback_data='add_wb')

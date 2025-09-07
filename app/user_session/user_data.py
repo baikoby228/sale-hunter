@@ -2,6 +2,6 @@ class UserData:
     article: int
     max_price: int
 
-    def __init__(self, type) -> None:
+    def __init__(self, type, start_step) -> None:
         self.type = type
-        self.step = 0
+        self.step = start_step

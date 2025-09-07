@@ -11,15 +11,15 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def processing_command_del(message) -> None:
+def processing_command_set(message) -> None:
     user_id = message.from_user.id
     chat_id = message.chat.id
 
-    data = create_user_session(user_id, 'del', 0)
+    data = create_user_session(user_id, 'set', 0)
 
     markup = types.InlineKeyboardMarkup(row_width=1)
-    button_wb = types.InlineKeyboardButton('Wildberries', callback_data='del_wb')
+    button_wb = types.InlineKeyboardButton('Wildberries', callback_data='set_wb')
     markup.add(button_wb)
 
-    text = 'Выберите маркетплейс, с которого удаляете товар из списка отслеживаемых'
+    text = 'Выберите маркетплейс, с которого измените максимальную цену товар из списка отслеживаемых'
     bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
