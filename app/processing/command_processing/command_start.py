@@ -17,7 +17,6 @@ def processing_command_start(message) -> None:
         '<code>/menu</code> для открытия меню отслеживаемых товаров\n'
         '<code>/add</code> для добовления товара в список отслеживаемых\n'
         '<code>/remove</code> для удаления товара из списока отслеживаемых\n'
-        '<code>/change</code> для смены максимальной цены у отслеживаемого товара\n'
-        '<code>/info</code> для получении списка отслеживаемых товаров'
+        '<code>/change</code> для смены максимальной цены у отслеживаемого товара'
     )
     bot.send_message(chat_id, text, parse_mode='html')

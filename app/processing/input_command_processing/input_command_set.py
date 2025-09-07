@@ -3,9 +3,8 @@ import telebot
 from dotenv import load_dotenv
 import os
 
-from config import MAX_AMOUNT_OF_TARGETS
 from utils import find_number
-from infra import set_target_max_price, check_target, get_targets_amount
+from infra import set_target_max_price, check_target
 from ...user_session import get_user_session, del_user_session
 from ...wb_parser import wb_parser
 
@@ -14,7 +13,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def input_command_set_processing(message):
+def input_command_set_processing(message) -> None:
     user_id = message.from_user.id
     chat_id = message.chat.id
 

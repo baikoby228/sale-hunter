@@ -6,7 +6,7 @@ import os
 from app import (input_processing, processing_command_start, processing_command_add,
                  processing_callback_add_marketplace, processing_command_del, processing_callback_del_marketplace,
                  processing_command_set, processing_callback_set_marketplace)
-from print_all import print_all_processing
+#from print_all import print_all_processing
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -48,7 +48,7 @@ def callback_set_marketplace_handler(callback) -> None:
     processing_callback_set_marketplace(callback)
 
 @bot.message_handler(content_types=['text'])
-def input_text(message):
+def input_text(message) -> None:
     input_processing(message)
 
 bot.infinity_polling()

@@ -14,7 +14,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def input_command_add_processing(message):
+def input_command_add_processing(message) -> None:
     user_id = message.from_user.id
     chat_id = message.chat.id
 

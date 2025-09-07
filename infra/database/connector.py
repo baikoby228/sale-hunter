@@ -2,7 +2,7 @@ import sqlite3
 from pathlib import Path
 from typing import List, Tuple
 
-def create_db():
+def create_db() -> None:
     db = sqlite3.connect(Path(__file__).parent / 'user_data_base.db')
     c = db.cursor()
 
@@ -19,7 +19,7 @@ def create_db():
     db.commit()
     db.close()
 
-def add_target(user_id: int, article: int, max_price: int):
+def add_target(user_id: int, article: int, max_price: int) -> None:
     db = sqlite3.connect(Path(__file__).parent / 'user_data_base.db')
     c = db.cursor()
 
@@ -48,7 +48,7 @@ def get_targets(user_id: int) -> List[Tuple[int, int]]:
 
     return res
 
-def del_target(user_id: int, article: str):
+def del_target(user_id: int, article: str) -> None:
     db = sqlite3.connect(Path(__file__).parent / 'user_data_base.db')
     c = db.cursor()
 
@@ -77,7 +77,7 @@ def check_target(user_id: int, article: str) -> bool:
 
     return res is not None
 
-def set_target_max_price(user_id: int, article: int, new_max_price: int):
+def set_target_max_price(user_id: int, article: int, new_max_price: int) -> None:
     db = sqlite3.connect(Path(__file__).parent / 'user_data_base.db')
     c = db.cursor()
 

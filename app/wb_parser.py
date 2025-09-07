@@ -11,7 +11,7 @@ def parse_bs(html) -> str:
     res = soup.find("ins", class_='priceBlockFinalPrice--iToZR').text
     return res
 
-def parse_selenium(article):
+def parse_selenium(article) -> str:
     url = f'https://www.wildberries.by/catalog/{article}/detail.aspx'
 
     chrome_options = Options()
