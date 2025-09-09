@@ -4,7 +4,7 @@ from telebot import types
 from dotenv import load_dotenv
 import os
 
-from ....user_session import create_user_session
+from ....session import create_user_session, create_product_session
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -16,6 +16,7 @@ def processing_command_set(message) -> None:
     chat_id = message.chat.id
 
     create_user_session(user_id, 'set', -1)
+    create_product_session(user_id)
 
     markup = types.InlineKeyboardMarkup(row_width=1)
     button_wb = types.InlineKeyboardButton('Wildberries', callback_data='set_wb')

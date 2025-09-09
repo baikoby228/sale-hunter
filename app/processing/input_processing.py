@@ -1,4 +1,4 @@
-from ..user_session import get_user_session
+from ..session import get_user_session
 from .input_command_processing import (input_command_add_processing, input_command_del_processing,
                                        input_command_set_processing)
 

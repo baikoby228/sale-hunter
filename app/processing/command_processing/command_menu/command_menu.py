@@ -6,7 +6,7 @@ import os
 
 from infra import get_targets, get_targets_amount
 from utils import format_price_byn
-from ....user_session import get_user_session
+from ....session import get_user_session
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
