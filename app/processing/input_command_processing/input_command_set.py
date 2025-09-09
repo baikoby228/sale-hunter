@@ -24,7 +24,7 @@ def input_command_set_processing(message) -> None:
         case 0:
             user.article = find_number(message.text)
 
-            if not check_target(user_id, user.article):
+            if not check_target(user_id, user.marketplace, user.article):
                 text = 'Товара нету в списке отслеживаемых'
                 bot.send_message(chat_id, text, parse_mode='html')
                 del_user_session(user_id)
@@ -47,7 +47,7 @@ def input_command_set_processing(message) -> None:
                 text = 'Товар на данный момент стоит меньше максимальной цены'
                 bot.send_message(chat_id, text, parse_mode='html')
             else:
-                set_target_max_price(user_id, user.article, user.max_price)
+                set_target_max_price(user_id, user.marketplace, user.article, user.max_price)
                 text = 'Новая цена отслеживания установлена'
                 bot.send_message(chat_id, text, parse_mode='html')
 

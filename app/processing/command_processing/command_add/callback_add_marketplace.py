@@ -16,6 +16,7 @@ def processing_callback_add_marketplace(callback) -> None:
 
     data = get_user_session(user_id)
     data.step = 0
+    data.marketplace = callback.data[4:]
 
     text = 'Введите артикул товара'
     bot.send_message(chat_id, text, parse_mode='html')

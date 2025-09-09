@@ -33,7 +33,7 @@ def input_command_add_processing(message) -> None:
         case 1:
             user.max_price = find_number(message.text)
 
-            if check_target(user_id, user.article):
+            if check_target(user_id, user.marketplace, user.article):
                 text = 'Товар с эти артикулом уже отслеживается'
                 bot.send_message(chat_id, text, parse_mode='html')
             elif get_targets_amount(user_id) == MAX_AMOUNT_OF_TARGETS:
@@ -48,7 +48,7 @@ def input_command_add_processing(message) -> None:
                     text = 'Товар на данный момент стоит меньше максимальной цены'
                     bot.send_message(chat_id, text, parse_mode='html')
                 else:
-                    add_target(user_id, user.article, user.max_price)
+                    add_target(user_id, user.marketplace, user.article, user.max_price)
                     text = 'Товар добавлен в список отслеживаемых'
                     bot.send_message(chat_id, text, parse_mode='html')
 
