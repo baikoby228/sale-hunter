@@ -5,9 +5,9 @@ import os
 
 from config import MAX_AMOUNT_OF_TARGETS
 from utils import find_number
-from infra import add_target, check_target, get_targets_amount
+from infra import add_product, check_product, get_products_amount
 from ...session import get_user_session, del_user_session, get_product_session, del_product_session
-from ...wb_parser import wb_parser
+from ...parsers import wb_parser
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -35,22 +35,32 @@ def input_command_add_processing(message) -> None:
         case 1:
             product.max_price = find_number(message.text)
 
-            if check_target(user_id, product.marketplace, product.article):
+            if check_product(user_id, product.marketplace, product.article):
                 text = 'Товар с эти артикулом уже отслеживается'
                 bot.send_message(chat_id, text, parse_mode='html')
-            elif get_targets_amount(user_id) == MAX_AMOUNT_OF_TARGETS:
+            elif get_products_amount(user_id) == MAX_AMOUNT_OF_TARGETS:
                 text = f'Достигнут лимит отслеживаемых товаров ({MAX_AMOUNT_OF_TARGETS})'
                 bot.send_message(chat_id, text, parse_mode='html')
             else:
-                text = 'Получение текущей цены товара...'
+                text = 'Получение данных о товаре...'
                 bot.send_message(chat_id, text, parse_mode='html')
 
-                current_price = find_number(wb_parser(product.article))
-                if current_price <= product.max_price:
-                    text = 'Товар на данный момент стоит меньше максимальной цены'
+                pr = wb_parser(product.article)
+                product.name = pr.name
+                product.photo_url = pr.photo_url
+                product.current_price = pr.current_price
+
+                '''
+                print(product.name)
+                print(product.photo_url)
+                print(product.current_price)
+                '''
+
+                if product.current_price <= product.max_price:
+                    text = 'Товар на данный не превышает отслеживаемую цены'
                     bot.send_message(chat_id, text, parse_mode='html')
                 else:
-                    add_target(user_id, product.marketplace, product.article, product.max_price)
+                    add_product(user_id, product)
                     text = 'Товар добавлен в список отслеживаемых'
                     bot.send_message(chat_id, text, parse_mode='html')
 

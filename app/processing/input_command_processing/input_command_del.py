@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 
 from utils import find_number
-from infra import del_target, check_target
+from infra import del_product, check_product
 from ...session import get_user_session, del_user_session, get_product_session, del_product_session
 
 load_dotenv()
@@ -25,8 +25,8 @@ def input_command_del_processing(message) -> None:
         case 0:
             product.article = find_number(message.text)
 
-            if check_target(user_id, product.marketplace, product.article):
-                del_target(user_id, product.marketplace, product.article)
+            if check_product(user_id, product.marketplace, product.article):
+                del_product(user_id, product.marketplace, product.article)
                 text = 'Товар удалён из списка отслеживаемых'
                 bot.send_message(chat_id, text, parse_mode='html')
             else:

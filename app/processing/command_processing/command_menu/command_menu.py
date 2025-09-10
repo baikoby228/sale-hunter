@@ -4,7 +4,7 @@ from telebot import types
 from dotenv import load_dotenv
 import os
 
-from infra import get_targets, get_targets_amount
+from infra import get_products, get_products_amount
 from utils import format_price_byn
 from ....session import get_user_session
 
@@ -19,18 +19,16 @@ def processing_command_menu(message) -> None:
 
     user = get_user_session(user_id)
 
-    amount = get_targets_amount(user_id)
-    targets = get_targets(user_id)
+    amount = get_products_amount(user_id)
+    products = get_products(user_id)
 
     markup = types.InlineKeyboardMarkup(row_width=2)
-    for target in targets:
-        marketplace, article, max_price = target
-
-        button_info = types.InlineKeyboardButton(f'{marketplace.upper()} - {article} - {format_price_byn(max_price)}', callback_data=f'set_wb_{article}')
+    for product in products:
+        button_info = types.InlineKeyboardButton(f'{product.marketplace.upper()} - {product.article}', callback_data=f'set_wb_{product.article}')
         markup.row(button_info)
 
-        button_del = types.InlineKeyboardButton('максимальная цена', callback_data=f'del_wb_{article}')
-        button_set = types.InlineKeyboardButton('текущая цена', callback_data=f'set_wb_{article}')
+        button_del = types.InlineKeyboardButton(format_price_byn(product.max_price), callback_data=f'del_wb_{product.article}')
+        button_set = types.InlineKeyboardButton(format_price_byn(product.current_price), callback_data=f'set_wb_{product.article}')
         markup.row(button_del, button_set)
 
     button_add = types.InlineKeyboardButton('Добавить товар в список отслеживаемых', callback_data=f'add')

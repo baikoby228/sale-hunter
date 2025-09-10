@@ -1,3 +1,5 @@
-from .database import add_target, get_targets, del_target, set_target_max_price, check_target, get_targets_amount
+from .database import (add_product, get_products, del_product, check_product, set_product_current_price,
+                        get_product_current_price, set_product_max_price, get_product_max_price, get_products_amount)
 
-__all__ = ['add_target', 'get_targets', 'del_target', 'set_target_max_price', 'check_target', 'get_targets_amount']
+__all__ = ['add_product', 'get_products', 'del_product', 'check_product', 'set_product_current_price',
+           'get_product_current_price', 'set_product_max_price', 'get_product_max_price', 'get_products_amount']

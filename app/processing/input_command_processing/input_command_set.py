@@ -4,9 +4,8 @@ from dotenv import load_dotenv
 import os
 
 from utils import find_number
-from infra import set_target_max_price, check_target
+from infra import set_product_max_price, check_product, get_product_current_price
 from ...session import get_user_session, del_user_session, get_product_session, del_product_session
-from ...wb_parser import wb_parser
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -26,7 +25,7 @@ def input_command_set_processing(message) -> None:
         case 0:
             product.article = find_number(message.text)
 
-            if not check_target(user_id, product.marketplace, product.article):
+            if not check_product(user_id, product.marketplace, product.article):
                 text = 'Товара нету в списке отслеживаемых'
                 bot.send_message(chat_id, text, parse_mode='html')
                 del_user_session(user_id)
@@ -41,15 +40,12 @@ def input_command_set_processing(message) -> None:
         case 1:
             product.max_price = find_number(message.text)
 
-            text = 'Получение текущей цены товара...'
-            bot.send_message(chat_id, text, parse_mode='html')
-
-            current_price = find_number(wb_parser(product.article))
+            current_price = get_product_current_price(user_id, product.marketplace, product.article)
             if current_price <= product.max_price:
                 text = 'Товар на данный момент стоит меньше максимальной цены'
                 bot.send_message(chat_id, text, parse_mode='html')
             else:
-                set_target_max_price(user_id, product.marketplace, product.article, product.max_price)
+                set_product_max_price(user_id, product.marketplace, product.article, product.max_price)
                 text = 'Новая цена отслеживания установлена'
                 bot.send_message(chat_id, text, parse_mode='html')
 
