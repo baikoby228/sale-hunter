@@ -3,7 +3,7 @@ import telebot
 from dotenv import load_dotenv
 import os
 
-from utils import find_number
+from utils import find_number, find_price
 from infra import set_product_max_price, check_product, get_product_current_price
 from ...session import get_user_session, del_user_session, get_product_session, del_product_session
 
@@ -33,14 +33,11 @@ def input_command_set_processing(message) -> None:
                 del_product_session(user_id)
                 return
 
-            text = (
-                'Введите новую максимальную подходящую цену товара для оповещения\n'
-                'Примеры ввода:\n178,32 р.\n9.00 BYN\n41,00'
-            )
+            text = 'Введите новую максимальную подходящую цену товара для оповещения'
             bot.send_message(chat_id, text, parse_mode='html')
             user.step += 1
         case 1:
-            product.max_price = find_number(message.text)
+            product.max_price = find_price(message.text)
 
             current_price = get_product_current_price(user_id, product.marketplace, product.article)
             if current_price <= product.max_price:

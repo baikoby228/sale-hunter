@@ -3,7 +3,7 @@ import telebot
 from dotenv import load_dotenv
 import os
 
-from utils import find_number
+from utils import find_number, find_price
 from infra import add_product, check_product
 from ...session import get_user_session, del_user_session, get_product_session, del_product_session
 from ...parsers import wb_parser
@@ -39,7 +39,7 @@ def input_command_add_processing(message) -> None:
 
             user.step += 1
         case 1:
-            product.max_price = find_number(message.text)
+            product.max_price = find_price(message.text)
 
             text = 'Получение данных о товаре...'
             bot.send_message(chat_id, text, parse_mode='html')
