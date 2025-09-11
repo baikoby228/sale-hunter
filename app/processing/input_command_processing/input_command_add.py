@@ -29,6 +29,9 @@ def input_command_add_processing(message) -> None:
             if check_product(user_id, product.marketplace, product.article):
                 text = 'Товар с эти артикулом уже отслеживается'
                 bot.send_message(chat_id, text, parse_mode='html')
+
+                del_user_session(user_id)
+                del_product_session(user_id)
                 return
 
             text = 'Введите максимальную подходящую цену товара для оповещения'
@@ -42,6 +45,15 @@ def input_command_add_processing(message) -> None:
             bot.send_message(chat_id, text, parse_mode='html')
 
             pr = wb_parser(product.article)
+
+            if not pr:
+                text = 'Артикул невалиден'
+                bot.send_message(chat_id, text, parse_mode='html')
+
+                del_user_session(user_id)
+                del_product_session(user_id)
+                return
+
             product.name = pr.name
             product.photo_url = pr.photo_url
             product.current_price = pr.current_price
@@ -55,10 +67,14 @@ def input_command_add_processing(message) -> None:
             if product.current_price <= product.max_price:
                 text = 'Товар на данный не превышает отслеживаемую цены'
                 bot.send_message(chat_id, text, parse_mode='html')
-            else:
-                add_product(user_id, product)
-                text = 'Товар добавлен в список отслеживаемых'
-                bot.send_message(chat_id, text, parse_mode='html')
+
+                del_user_session(user_id)
+                del_product_session(user_id)
+                return
+
+            add_product(user_id, product)
+            text = 'Товар добавлен в список отслеживаемых'
+            bot.send_message(chat_id, text, parse_mode='html')
 
             del_user_session(user_id)
             del_product_session(user_id)

@@ -1,5 +1,3 @@
-import time
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -11,24 +9,7 @@ import fake_useragent
 from utils import find_number
 from ..session import ProductData
 
-def bs_parser(html) -> ProductData:
-    res = ProductData()
-
-    soup = BeautifulSoup(html, "lxml")
-
-    res.name = soup.find("h1", class_='productTitle--J2W7I').text
-    res.current_price = find_number(soup.find("ins", class_='priceBlockFinalPrice--iToZR').text)
-
-    divs = soup.find("div", class_='swiper-wrapper verticalWrapper--K5LVG').find_all("div", class_=['swiper-slide', 'verticalSlide--fBKUm'])
-    for div in divs:
-        photo = div.find('img')
-        if photo:
-            res.photo_url = photo['src']
-            break
-
-    return res
-
-def selenium_parser(article) -> str:
+def get_html(article) -> str | None:
     url = f'https://www.wildberries.by/catalog/{article}/detail.aspx'
 
     chrome_options = Options()
@@ -49,7 +30,7 @@ def selenium_parser(article) -> str:
 
     driver.get(url)
 
-    wait = WebDriverWait(driver, 20)
+    wait = WebDriverWait(driver, 30)
 
     '''
     time.sleep(30)
@@ -57,18 +38,44 @@ def selenium_parser(article) -> str:
         file.write(driver.page_source)
     '''
 
-    wait.until(EC.presence_of_element_located((By.CLASS_NAME, "productTitle--J2W7I")))
+    wait.until(EC.any_of(
+        EC.presence_of_element_located((By.CLASS_NAME, "content404")),
+        EC.presence_of_element_located((By.CLASS_NAME, "productTitle--J2W7I"))
+    ))
+
+    if driver.find_elements(By.CLASS_NAME, "content404"):
+        return None
+
     wait.until(EC.presence_of_element_located((By.CLASS_NAME, "verticalSlide--fBKUm")))
     wait.until(EC.presence_of_element_located((By.CLASS_NAME, "priceBlockFinalPrice--iToZR")))
 
     return driver.page_source
 
-def wb_parser(article: int) -> ProductData:
-    html = selenium_parser(article)
-    return bs_parser(html)
+def get_product(html) -> ProductData:
+    res = ProductData()
 
+    soup = BeautifulSoup(html, "lxml")
+
+    res.name = soup.find("h1", class_='productTitle--J2W7I').text
+    res.current_price = find_number(soup.find("ins", class_='priceBlockFinalPrice--iToZR').text)
+
+    divs = soup.find("div", class_='swiper-wrapper verticalWrapper--K5LVG').find_all("div", class_=['swiper-slide', 'verticalSlide--fBKUm'])
+    for div in divs:
+        photo = div.find('img')
+        if photo:
+            res.photo_url = photo['src']
+            break
+
+    return res
+
+def wb_parser(article: int) -> ProductData | None:
+    html = get_html(article)
+    if not html:
+        return None
+    return get_product(html)
+
+'''
 if __name__ == "__main__":
-    '''
     article = int(input('Введите артикул:\n'))
     print(f'Цена - {wb_parser(article).current_price}')
-    '''
+'''

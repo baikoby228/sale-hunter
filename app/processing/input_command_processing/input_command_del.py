@@ -25,13 +25,19 @@ def input_command_del_processing(message) -> None:
         case 0:
             product.article = find_number(message.text)
 
-            if check_product(user_id, product.marketplace, product.article):
-                del_product(user_id, product.marketplace, product.article)
-                text = 'Товар удалён из списка отслеживаемых'
-                bot.send_message(chat_id, text, parse_mode='html')
-            else:
+
+            if not check_product(user_id, product.marketplace, product.article):
                 text = 'Товара нету в списке отслеживаемых'
                 bot.send_message(chat_id, text, parse_mode='html')
+
+                del_user_session(user_id)
+                del_product_session(user_id)
+                return
+
+
+            del_product(user_id, product.marketplace, product.article)
+            text = 'Товар удалён из списка отслеживаемых'
+            bot.send_message(chat_id, text, parse_mode='html')
 
             del_user_session(user_id)
             del_product_session(user_id)
