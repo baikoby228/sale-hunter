@@ -6,6 +6,7 @@ import os
 
 from infra import get_products, get_products_amount
 from utils import format_price_byn
+from config import MAX_AMOUNT_OF_TARGETS
 from ....session import get_user_session
 
 load_dotenv()
@@ -31,8 +32,9 @@ def processing_command_menu(message) -> None:
         button_set = types.InlineKeyboardButton(format_price_byn(product.current_price), callback_data=f'set_wb_{product.article}')
         markup.row(button_del, button_set)
 
-    button_add = types.InlineKeyboardButton('Добавить товар в список отслеживаемых', callback_data=f'add')
-    markup.row(button_add)
+    if amount != MAX_AMOUNT_OF_TARGETS:
+        button_add = types.InlineKeyboardButton('Добавить товар в список отслеживаемых', callback_data=f'add')
+        markup.row(button_add)
 
-    text = 'Меню'
+    text = f'Меню ({amount}/{MAX_AMOUNT_OF_TARGETS})'
     bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)

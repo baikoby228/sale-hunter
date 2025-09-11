@@ -29,7 +29,6 @@ def input_command_set_processing(message) -> None:
                 text = 'Товара нету в списке отслеживаемых'
                 bot.send_message(chat_id, text, parse_mode='html')
                 del_user_session(user_id)
-
             else:
                 text = (
                     'Введите новую максимальную подходящую цену товара для оповещения\n'
