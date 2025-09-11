@@ -31,10 +31,7 @@ def input_command_add_processing(message) -> None:
                 bot.send_message(chat_id, text, parse_mode='html')
                 return
 
-            text = (
-                'Введите максимальную подходящую цену товара для оповещения\n'
-                'Примеры ввода:\n178,32 р.\n9.00 BYN\n41,00'
-            )
+            text = 'Введите максимальную подходящую цену товара для оповещения'
             bot.send_message(chat_id, text, parse_mode='html')
 
             user.step += 1
