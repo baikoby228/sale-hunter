@@ -1,4 +1,5 @@
 import telebot
+from datetime import datetime
 
 from dotenv import load_dotenv
 import os
@@ -57,6 +58,7 @@ def input_command_add_processing(message) -> None:
             product.name = pr.name
             product.photo_url = pr.photo_url
             product.current_price = pr.current_price
+            product.start_price = pr.current_price
 
             '''
             print(product.name)
@@ -72,7 +74,9 @@ def input_command_add_processing(message) -> None:
                 del_product_session(user_id)
                 return
 
+            product.add_time = str(datetime.now())
             add_product(user_id, product)
+
             text = 'Товар добавлен в список отслеживаемых'
             bot.send_message(chat_id, text, parse_mode='html')
 

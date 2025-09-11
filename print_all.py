@@ -14,6 +14,16 @@ def print_all_processing(message):
     user_id = message.from_user.id
     chat_id = message.chat.id
 
-    v = get_products(user_id)
-    for a, b in v:
-        bot.send_message(chat_id, f'<code>{a}</code> - {b}', parse_mode='html')
+    products = get_products(user_id)
+    for product in products:
+        text = (
+            f'mp = {product.marketplace}\n'
+            f'art = {product.article}\n'
+            f'name = {product.name}\n'
+            f'photo = {product.photo_url}\n'
+            f'cur_price = {product.current_price}\n'
+            f'st_price = {product.start_price}\n'
+            f'time = {product.add_time}\n'
+            f'mx_pr = {product.max_price}\n'
+        )
+        bot.send_message(chat_id, text, parse_mode='html')

@@ -14,12 +14,6 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-'''
-from infra.database.connector import create_db
-if __name__ == '__main__':
-    create_db()
-'''
-
 @bot.message_handler(commands=['start'])
 def command_start_handler(message) -> None:
     processing_command_start(message)
@@ -73,3 +67,9 @@ def input_text(message) -> None:
     input_processing(message)
 
 bot.infinity_polling()
+
+'''
+from infra.database.connector import create_db
+if __name__ == '__main__':
+    create_db()
+'''

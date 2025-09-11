@@ -17,9 +17,11 @@ def create_db() -> None:
             name TEXT,
             photo_url TEXT,
             current_price INTEGER,
+            start_price INTEGER,
+            add_time TEXT,
             max_price INTEGER
             )
-    """)
+        """)
 
     db.commit()
     db.close()
@@ -29,20 +31,46 @@ def add_product(user_id: int, product: ProductData) -> None:
     c = db.cursor()
 
     c.execute("""
-        INSERT INTO products (user_id, marketplace, article, name, photo_url, current_price, max_price)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    """, (user_id, product.marketplace, product.article, product.name, product.photo_url, product.current_price, product.max_price))
+        INSERT INTO products (
+            user_id,
+            marketplace,
+            article,
+            name,
+            photo_url,
+            current_price,
+            start_price,
+            add_time,
+            max_price
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        user_id,
+        product.marketplace,
+        product.article,
+        product.name,
+        product.photo_url,
+        product.current_price,
+        product.start_price,
+        product.add_time,
+        product.max_price
+    ))
 
     db.commit()
     db.close()
-
 
 def get_products(user_id: int) -> list[ProductData]:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
     c.execute("""
-        SELECT marketplace, article, name, photo_url, current_price, max_price
+        SELECT
+            marketplace,
+            article,
+            name,
+            photo_url,
+            current_price,
+            start_price,
+            add_time,
+            max_price
         FROM products
         WHERE user_id = ?
     """, (user_id,))
