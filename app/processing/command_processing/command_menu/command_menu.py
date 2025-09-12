@@ -33,5 +33,8 @@ def processing_command_menu(user_id: int, chat_id: int) -> None:
         button_add = types.InlineKeyboardButton('Добавить товар', callback_data='add')
         markup.row(button_add)
 
-    text = f'Меню ({amount}/{MAX_AMOUNT_OF_PRODUCTS})'
+    text = (
+        f'Меню ({amount}/{MAX_AMOUNT_OF_PRODUCTS})\n'
+        '...'
+    )
     bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)

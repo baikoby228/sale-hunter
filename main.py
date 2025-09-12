@@ -3,7 +3,7 @@ import telebot
 from dotenv import load_dotenv
 import os
 
-from app import (input_processing, processing_command_start, processing_command_add,
+from app import (input_processing, processing_command_start, processing_command_help, processing_command_add,
                  processing_callback_add_marketplace, processing_command_del, processing_callback_del_marketplace,
                  processing_command_set, processing_callback_set_marketplace, processing_command_menu,
                  processing_callback_menu_info, processing_callback_menu_set, processing_callback_menu_del)
@@ -18,6 +18,13 @@ def command_start_handler(message) -> None:
     user_id = message.from_user.id
     chat_id = message.chat.id
     processing_command_start(user_id, chat_id)
+
+
+@bot.message_handler(commands=['help'])
+def command_help_handler(message) -> None:
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+    processing_command_help(user_id, chat_id)
 
 @bot.message_handler(commands=['add'])
 def command_add_handler(message) -> None:
