@@ -6,7 +6,7 @@ import os
 from app import (input_processing, processing_command_start, processing_command_add,
                  processing_callback_add_marketplace, processing_command_del, processing_callback_del_marketplace,
                  processing_command_set, processing_callback_set_marketplace, processing_command_menu,
-                 processing_callback_menu_info, processing_callback_menu_set)
+                 processing_callback_menu_info, processing_callback_menu_set, processing_callback_menu_del)
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -78,6 +78,12 @@ def callback_menu_set_handler(callback) -> None:
     user_id = callback.from_user.id
     chat_id = callback.message.chat.id
     processing_callback_menu_set(user_id, chat_id, callback.data)
+
+@bot.callback_query_handler(func=lambda callback: len(callback.data) >= 4 and callback.data[:3] == 'del' and callback.data.count('_') == 2)
+def callback_menu_del_handler(callback) -> None:
+    user_id = callback.from_user.id
+    chat_id = callback.message.chat.id
+    processing_callback_menu_del(user_id, chat_id, callback.data)
 
 @bot.message_handler(content_types=['text'])
 def input_text(message) -> None:
