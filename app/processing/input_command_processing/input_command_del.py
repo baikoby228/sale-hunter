@@ -12,7 +12,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def input_command_del_processing(message) -> None:
+def processing_input_command_del(message) -> None:
     user_id = message.from_user.id
     chat_id = message.chat.id
 

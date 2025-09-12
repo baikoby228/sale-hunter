@@ -1,6 +1,6 @@
 from ..session import get_user_session
-from .input_command_processing import (input_command_add_processing, input_command_del_processing,
-                                       input_command_set_processing)
+from .input_command_processing import (processing_input_command_add, processing_input_command_del,
+                                       processing_input_command_set)
 
 def input_processing(message) -> None:
     user_id = message.from_user.id
@@ -11,8 +11,8 @@ def input_processing(message) -> None:
 
     match current_type:
         case 'add':
-            input_command_add_processing(message)
+            processing_input_command_add(message)
         case 'del':
-            input_command_del_processing(message)
+            processing_input_command_del(message)
         case 'set':
-            input_command_set_processing(user_id, chat_id, message.text)
+            processing_input_command_set(user_id, chat_id, message.text)

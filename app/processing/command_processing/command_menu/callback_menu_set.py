@@ -5,7 +5,7 @@ import os
 
 from utils import parse_callback_data
 from ....session import get_user_session, get_product_session
-from ...input_command_processing import input_command_set_processing
+from ...input_command_processing import processing_input_command_set
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -27,4 +27,4 @@ def processing_callback_menu_set(callback):
     product = get_product_session(user_id)
     product.marketplace = marketplace
 
-    input_command_set_processing(user_id, chat_id, article)
+    processing_input_command_set(user_id, chat_id, article)

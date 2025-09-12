@@ -12,7 +12,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def input_command_set_processing(user_id: int, chat_id: int, message_text: str = None) -> None:
+def processing_input_command_set(user_id: int, chat_id: int, message_text: str = None) -> None:
     user = get_user_session(user_id)
     current_step = user.step
 
@@ -46,7 +46,7 @@ def input_command_set_processing(user_id: int, chat_id: int, message_text: str =
                 return
 
             user.step += 1
-            input_command_set_processing(user_id, chat_id, message_text)
+            processing_input_command_set(user_id, chat_id, message_text)
         case 2:
             set_product_max_price(user_id, product.marketplace, product.article, product.max_price)
             text = 'Новая цена отслеживания установлена'
