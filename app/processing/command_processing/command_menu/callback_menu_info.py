@@ -38,8 +38,8 @@ def processing_callback_menu_info(callback):
     )
 
     markup = types.InlineKeyboardMarkup()
-    button_del = types.InlineKeyboardButton(format_price_byn(product.max_price), callback_data=f'del_wb_{product.article}')
-    button_set = types.InlineKeyboardButton(format_price_byn(product.current_price), callback_data=f'set_wb_{product.article}')
-    markup.row(button_del, button_set)
+    button_set = types.InlineKeyboardButton(format_price_byn(product.max_price), callback_data=f'set_wb_{product.article}')
+    button_del = types.InlineKeyboardButton(format_price_byn(product.current_price), callback_data=f'del_wb_{product.article}')
+    markup.row(button_set, button_del)
 
     bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)

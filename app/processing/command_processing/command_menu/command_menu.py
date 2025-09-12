@@ -28,9 +28,9 @@ def processing_command_menu(message) -> None:
         button_info = types.InlineKeyboardButton(f'{product.marketplace.upper()} - {product.article}', callback_data=f'info_wb_{product.article}')
         markup.row(button_info)
 
-        button_del = types.InlineKeyboardButton(format_price_byn(product.max_price), callback_data=f'del_wb_{product.article}')
-        button_set = types.InlineKeyboardButton(format_price_byn(product.current_price), callback_data=f'set_wb_{product.article}')
-        markup.row(button_del, button_set)
+        button_set = types.InlineKeyboardButton(format_price_byn(product.max_price), callback_data=f'set_wb_{product.article}')
+        button_del = types.InlineKeyboardButton(format_price_byn(product.current_price), callback_data=f'del_wb_{product.article}')
+        markup.row(button_set, button_del)
 
     if amount != MAX_AMOUNT_OF_PRODUCTS:
         button_add = types.InlineKeyboardButton('Добавить товар в список отслеживаемых', callback_data=f'add')
