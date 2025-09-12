@@ -8,10 +8,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def processing_command_start(message) -> None:
-    user_id = message.from_user.id
-    chat_id = message.chat.id
-
+def processing_command_start(user_id: int, chat_id: int) -> None:
     text = (
         'Привет я бот sale hunter, я помогу тебе выгодно закупаться на маркетплейсах\n'
         '<code>/menu</code> для открытия меню отслеживаемых товаров\n'

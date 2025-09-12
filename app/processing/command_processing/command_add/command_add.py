@@ -13,7 +13,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def processing_command_add(user_id, chat_id) -> None:
+def processing_command_add(user_id: int, chat_id: int) -> None:
     if get_products_amount(user_id) == MAX_AMOUNT_OF_PRODUCTS:
         text = f'Достигнут лимит отслеживаемых товаров ({MAX_AMOUNT_OF_PRODUCTS})'
         bot.send_message(chat_id, text, parse_mode='html')

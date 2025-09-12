@@ -12,10 +12,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def processing_input_command_del(message) -> None:
-    user_id = message.from_user.id
-    chat_id = message.chat.id
-
+def processing_input_command_del(user_id: int, chat_id: int, message_text: str = None) -> None:
     user = get_user_session(user_id)
     current_step = user.step
 
@@ -23,8 +20,7 @@ def processing_input_command_del(message) -> None:
 
     match current_step:
         case 0:
-            product.article = find_number(message.text)
-
+            product.article = find_number(message_text)
 
             if not check_product(user_id, product.marketplace, product.article):
                 text = 'Товара нету в списке отслеживаемых'
@@ -33,7 +29,6 @@ def processing_input_command_del(message) -> None:
                 del_user_session(user_id)
                 del_product_session(user_id)
                 return
-
 
             del_product(user_id, product.marketplace, product.article)
             text = 'Товар удалён из списка отслеживаемых'

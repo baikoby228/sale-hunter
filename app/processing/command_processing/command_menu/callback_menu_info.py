@@ -13,13 +13,10 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def processing_callback_menu_info(callback):
-    user_id = callback.from_user.id
-    chat_id = callback.message.chat.id
-
+def processing_callback_menu_info(user_id: int, chat_id: int, callback_data: str):
     user = get_user_session(user_id)
 
-    a = parse_callback_data(callback.data)
+    a = parse_callback_data(callback_data)
     marketplace = a[1]
     article = int(a[2])
 

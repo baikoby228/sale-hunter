@@ -14,10 +14,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def processing_command_menu(message) -> None:
-    user_id = message.from_user.id
-    chat_id = message.chat.id
-
+def processing_command_menu(user_id: int, chat_id: int) -> None:
     user = get_user_session(user_id)
 
     amount = get_products_amount(user_id)
