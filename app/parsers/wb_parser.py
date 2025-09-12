@@ -46,7 +46,10 @@ def get_html(article) -> str | None:
     if driver.find_elements(By.CLASS_NAME, "content404"):
         return None
 
-    wait.until(EC.presence_of_element_located((By.CLASS_NAME, "verticalSlide--fBKUm")))
+    wait.until(EC.any_of(
+        EC.presence_of_element_located((By.CLASS_NAME, "verticalSlide--fBKUm")),
+        EC.presence_of_element_located((By.CLASS_NAME, "miniatureSlide--acvJc"))
+    ))
     wait.until(EC.presence_of_element_located((By.CLASS_NAME, "priceBlockFinalPrice--iToZR")))
 
     return driver.page_source
@@ -59,7 +62,18 @@ def get_product(html) -> ProductData:
     res.name = soup.find("h1", class_='productTitle--J2W7I').text
     res.current_price = find_number(soup.find("ins", class_='priceBlockFinalPrice--iToZR').text)
 
-    divs = soup.find("div", class_='swiper-wrapper verticalWrapper--K5LVG').find_all("div", class_=['swiper-slide', 'verticalSlide--fBKUm'])
+    flag = True
+    wrapper = soup.find("div", class_='swiper-wrapper verticalWrapper--K5LVG')
+    if wrapper:
+        divs = wrapper.find_all("div", class_=['swiper-slide', 'verticalSlide--fBKUm'])
+        if not divs:
+            flag = False
+    else:
+        flag = False
+
+    if not flag:
+        divs = soup.find("div", class_='swiper-wrapper miniaturesWrapper--PF0rM').find_all("div", class_=['swiper-slide', 'miniatureSlide--acvJc'])
+
     for div in divs:
         photo = div.find('img')
         if photo:

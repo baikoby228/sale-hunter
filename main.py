@@ -6,7 +6,7 @@ import os
 from app import (input_processing, processing_command_start, processing_command_add,
                  processing_callback_add_marketplace, processing_command_del, processing_callback_del_marketplace,
                  processing_command_set, processing_callback_set_marketplace, processing_command_menu,
-                 processing_callback_menu_info)
+                 processing_callback_menu_info, processing_callback_menu_set)
 from print_all import print_all_processing
 from test import test_processing
 
@@ -63,9 +63,13 @@ def callback_del_marketplace_handler(callback) -> None:
 def callback_set_marketplace_handler(callback) -> None:
     processing_callback_set_marketplace(callback)
 
-@bot.callback_query_handler(func=lambda callback: len(callback.data) >= 4 and callback.data[:4] == 'info')
+@bot.callback_query_handler(func=lambda callback: len(callback.data) >= 4 and callback.data[:4] == 'info' and callback.data.count('_') == 2)
 def callback_menu_info_handler(callback) -> None:
     processing_callback_menu_info(callback)
+
+@bot.callback_query_handler(func=lambda callback: len(callback.data) >= 4 and callback.data[:3] == 'set' and callback.data.count('_') == 2)
+def callback_menu_info_handler(callback) -> None:
+    processing_callback_menu_set(callback)
 
 @bot.message_handler(content_types=['text'])
 def input_text(message) -> None:

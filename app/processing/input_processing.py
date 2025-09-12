@@ -15,4 +15,4 @@ def input_processing(message) -> None:
         case 'del':
             input_command_del_processing(message)
         case 'set':
-            input_command_set_processing(message)
+            input_command_set_processing(user_id, chat_id, message.text)

@@ -12,10 +12,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
-def input_command_set_processing(message) -> None:
-    user_id = message.from_user.id
-    chat_id = message.chat.id
-
+def input_command_set_processing(user_id: int, chat_id: int, message_text: str = None) -> None:
     user = get_user_session(user_id)
     current_step = user.step
 
@@ -23,7 +20,7 @@ def input_command_set_processing(message) -> None:
 
     match current_step:
         case 0:
-            product.article = find_number(message.text)
+            product.article = find_number(message_text)
 
             if not check_product(user_id, product.marketplace, product.article):
                 text = 'Товара нету в списке отслеживаемых'
@@ -33,11 +30,11 @@ def input_command_set_processing(message) -> None:
                 del_product_session(user_id)
                 return
 
-            text = 'Введите новую максимальную подходящую цену товара для оповещения'
+            text = 'Введите новую цену товара для отслеживания'
             bot.send_message(chat_id, text, parse_mode='html')
             user.step += 1
         case 1:
-            product.max_price = find_price(message.text)
+            product.max_price = find_price(message_text)
 
             current_price = get_product_current_price(user_id, product.marketplace, product.article)
             if current_price <= product.max_price:
@@ -48,6 +45,9 @@ def input_command_set_processing(message) -> None:
                 del_product_session(user_id)
                 return
 
+            user.step += 1
+            input_command_set_processing(user_id, chat_id, message_text)
+        case 2:
             set_product_max_price(user_id, product.marketplace, product.article, product.max_price)
             text = 'Новая цена отслеживания установлена'
             bot.send_message(chat_id, text, parse_mode='html')
