@@ -30,6 +30,9 @@ def processing_input_command_del(user_id: int, chat_id: int, message_text: str =
                 del_product_session(user_id)
                 return
 
+            user.step += 1
+            processing_input_command_del(user_id, chat_id, message_text)
+        case 1:
             del_product(user_id, product.marketplace, product.article)
             text = 'Товар удалён из списка отслеживаемых'
             bot.send_message(chat_id, text, parse_mode='html')

@@ -71,6 +71,9 @@ def processing_input_command_add(user_id: int, chat_id: int, message_text: str =
                 del_product_session(user_id)
                 return
 
+            user.step += 1
+            processing_input_command_add(user_id, chat_id, message_text)
+        case 2:
             product.add_time = str(datetime.now())
             add_product(user_id, product)
 

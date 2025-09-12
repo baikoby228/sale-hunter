@@ -30,7 +30,7 @@ def processing_command_menu(user_id: int, chat_id: int) -> None:
         markup.row(button_set, button_del)
 
     if amount != MAX_AMOUNT_OF_PRODUCTS:
-        button_add = types.InlineKeyboardButton('Добавить товар в список отслеживаемых', callback_data=f'add')
+        button_add = types.InlineKeyboardButton('Добавить товар', callback_data='add')
         markup.row(button_add)
 
     text = f'Меню ({amount}/{MAX_AMOUNT_OF_PRODUCTS})'
