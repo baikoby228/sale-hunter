@@ -22,5 +22,5 @@ def processing_command_del(message) -> None:
     button_wb = types.InlineKeyboardButton('Wildberries', callback_data='del_wb')
     markup.add(button_wb)
 
-    text = 'Выберите маркетплейс, с которого удаляете товар из списка отслеживаемых'
+    text = 'Выберите маркетплейс товара, который удаляете из списка отслеживаемых'
     bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)

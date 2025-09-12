@@ -22,5 +22,5 @@ def processing_command_set(message) -> None:
     button_wb = types.InlineKeyboardButton('Wildberries', callback_data='set_wb')
     markup.add(button_wb)
 
-    text = 'Выберите маркетплейс, с которого измените максимальную цену товар из списка отслеживаемых'
+    text = 'Выберите маркетплейс товара из списка отслеживаемых, цену которого меняете'
     bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)

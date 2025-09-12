@@ -82,6 +82,30 @@ def get_products(user_id: int) -> list[ProductData]:
 
     return [ProductData(*row) for row in rows]
 
+def get_product(user_id: int, marketplace: str, article: int) -> ProductData:
+    db = sqlite3.connect(DB_PATH)
+    c = db.cursor()
+
+    c.execute("""
+        SELECT
+            marketplace,
+            article,
+            name,
+            photo_url,
+            current_price,
+            start_price,
+            add_time,
+            max_price
+        FROM products
+        WHERE user_id = ? AND marketplace = ? AND article = ?
+    """, (user_id, marketplace, article))
+
+    res = c.fetchone()
+
+    db.commit()
+    db.close()
+
+    return ProductData(*res)
 
 def del_product(user_id: int, marketplace: str, article: int) -> None:
     db = sqlite3.connect(DB_PATH)

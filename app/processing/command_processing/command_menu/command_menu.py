@@ -23,9 +23,9 @@ def processing_command_menu(message) -> None:
     amount = get_products_amount(user_id)
     products = get_products(user_id)
 
-    markup = types.InlineKeyboardMarkup(row_width=2)
+    markup = types.InlineKeyboardMarkup()
     for product in products:
-        button_info = types.InlineKeyboardButton(f'{product.marketplace.upper()} - {product.article}', callback_data=f'set_wb_{product.article}')
+        button_info = types.InlineKeyboardButton(f'{product.marketplace.upper()} - {product.article}', callback_data=f'info_wb_{product.article}')
         markup.row(button_info)
 
         button_del = types.InlineKeyboardButton(format_price_byn(product.max_price), callback_data=f'del_wb_{product.article}')
