@@ -26,6 +26,16 @@ def processing_callback_menu_info(user_id: int, chat_id: int, callback_data: str
     caption = f'{product.name}'
     bot.send_photo(chat_id, photo=product.photo_url, caption=caption, parse_mode='html')
 
+    markup = types.InlineKeyboardMarkup()
+
+    text = 'изменить'
+    button_set = types.InlineKeyboardButton(text, callback_data=f'set_wb_{product.article}')
+
+    text = 'удалить'
+    button_del = types.InlineKeyboardButton(text, callback_data=f'del_wb_{product.article}')
+
+    markup.row(button_set, button_del)
+
     text = (
         f'{product.marketplace.upper()} <code>{product.article}</code> <a href="{url}">ссылка</a>\n'
         f'Отслеживаемая цена - {format_price_byn(product.max_price)}\n'
@@ -33,10 +43,4 @@ def processing_callback_menu_info(user_id: int, chat_id: int, callback_data: str
         f'Стартовая цена - {format_price_byn(product.start_price)}\n'
         f'Время добавления в спиоск отслеживаемых товаров:\n{product.add_time[:16]}'
     )
-
-    markup = types.InlineKeyboardMarkup()
-    button_set = types.InlineKeyboardButton(format_price_byn(product.max_price), callback_data=f'set_wb_{product.article}')
-    button_del = types.InlineKeyboardButton(format_price_byn(product.current_price), callback_data=f'del_wb_{product.article}')
-    markup.row(button_set, button_del)
-
     bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
