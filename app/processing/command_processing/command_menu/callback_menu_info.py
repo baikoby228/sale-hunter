@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 
 from infra import get_product
-from utils import format_price_byn
+from utils import format_price_byn, parse_callback_data
 from ....session import get_user_session
 
 load_dotenv()
@@ -18,16 +18,7 @@ def processing_callback_menu_info(callback):
 
     user = get_user_session(user_id)
 
-    a = []
-    cur = ''
-    for x in callback.data:
-        if x == '_':
-            a.append(cur)
-            cur = ''
-        else:
-            cur += x
-    a.append(cur)
-
+    a = parse_callback_data(callback.data)
     marketplace = a[1]
     article = int(a[2])
 
