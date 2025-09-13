@@ -29,5 +29,20 @@ def processing_command_settings_sort(user_id: int, chat_id: int) -> None:
     button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
     markup.row(button_menu)
 
-    text = 'Выберите критерий сортировки и порядок сортировки'
+    text_sort_type: str
+    if user.sort_type == 'date':
+        text_sort_type = 'дате добавления товара в список отслеживаемых'
+    else:
+        text_sort_type = 'текущей цене товара'
+
+    text_sort_reverse: str
+    if user.sort_reverse:
+        text_sort_reverse = 'убыванию'
+    else:
+        text_sort_reverse = 'возрастанию'
+
+    text = (
+        f'Сейчас сортируется по {text_sort_type}, по {text_sort_reverse}\n'
+        'Выберите критерий сортировки и порядок сортировки'
+    )
     bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
