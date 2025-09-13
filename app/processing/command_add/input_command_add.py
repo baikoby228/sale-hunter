@@ -33,7 +33,7 @@ def processing_input_command_add(user_id: int, chat_id: int, message_text: str =
                 del_product_session(user_id)
                 return
 
-            text = 'Введите максимальную подходящую цену товара для оповещения'
+            text = 'Введите цену товара для отслеживания'
             bot.send_message(chat_id, text, parse_mode='html')
 
             user.step += 1
@@ -58,14 +58,8 @@ def processing_input_command_add(user_id: int, chat_id: int, message_text: str =
             product.current_price = pr.current_price
             product.start_price = pr.current_price
 
-            '''
-            print(product.name)
-            print(product.photo_url)
-            print(product.current_price)
-            '''
-
             if product.current_price <= product.max_price:
-                text = 'Товар на данный не превышает отслеживаемую цены'
+                text = 'Цена товар на данный момент не превышает отслеживаемую цены'
                 bot.send_message(chat_id, text, parse_mode='html')
 
                 del_user_session(user_id)

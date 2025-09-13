@@ -19,5 +19,5 @@ def processing_command_set(user_id: int, chat_id: int) -> None:
     button_wb = types.InlineKeyboardButton('Wildberries', callback_data='set_wb')
     markup.add(button_wb)
 
-    text = 'Выберите маркетплейс товара из списка отслеживаемых, цену которого меняете'
+    text = 'Выберите маркетплейс товара, цену которого меняете'
     bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)

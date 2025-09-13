@@ -39,7 +39,7 @@ def processing_input_command_set(user_id: int, chat_id: int, message_text: str =
 
             current_price = get_product_current_price(user_id, product.marketplace, product.article)
             if current_price <= product.max_price:
-                text = 'Товар на данный момент стоит меньше максимальной цены'
+                text = 'Цена товар на данный момент не превышает отслеживаемую цены'
                 bot.send_message(chat_id, text, parse_mode='html')
 
                 del_user_session(user_id)
