@@ -1,10 +1,10 @@
 import sqlite3
 from pathlib import Path
-from app.session import ProductData
+from app.session.product_data.product_data import ProductData
 
 DB_PATH = Path(__file__).parent / 'user_data_base.db'
 
-def create_db() -> None:
+def create_table() -> None:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 

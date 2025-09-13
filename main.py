@@ -7,6 +7,7 @@ from app import (input_processing, processing_command_start, processing_command_
                  processing_callback_add_marketplace, processing_command_del, processing_callback_del_marketplace,
                  processing_command_set, processing_callback_set_marketplace, processing_command_menu,
                  processing_callback_menu_info, processing_callback_menu_set, processing_callback_menu_del)
+from infra import create_table
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -18,7 +19,6 @@ def command_start_handler(message) -> None:
     user_id = message.from_user.id
     chat_id = message.chat.id
     processing_command_start(user_id, chat_id)
-
 
 @bot.message_handler(commands=['help'])
 def command_help_handler(message) -> None:
@@ -92,6 +92,27 @@ def callback_menu_del_handler(callback) -> None:
     chat_id = callback.message.chat.id
     processing_callback_menu_del(user_id, chat_id, callback.data)
 
+#
+from app.session import get_user_session
+
+@bot.message_handler(commands=['tp'])
+def pox1(message):
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+    user = get_user_session(user_id)
+    if user.sort_type == 'date':
+        user.sort_type = 'price'
+    else:
+        user.sort_type = 'date'
+
+@bot.message_handler(commands=['f'])
+def pox2(message):
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+    user = get_user_session(user_id)
+    user.sort_reverse = not user.sort_reverse
+#
+
 @bot.message_handler(content_types=['text'])
 def input_text(message) -> None:
     user_id = message.from_user.id
@@ -101,7 +122,8 @@ def input_text(message) -> None:
 bot.infinity_polling()
 
 '''
-from infra.database.connector import create_db
+#from infra.database.connector_products import create_table
+from infra.database.connector_users import create_table
 if __name__ == '__main__':
-    create_db()
+    create_table()
 '''
