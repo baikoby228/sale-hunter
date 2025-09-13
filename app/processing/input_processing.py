@@ -1,6 +1,7 @@
 from ..session import get_user_session
-from .input_command_processing import (processing_input_command_add, processing_input_command_del,
-                                       processing_input_command_set)
+from .command_add import processing_input_command_add
+from .command_del import processing_input_command_del
+from .command_set import processing_input_command_set
 
 def input_processing(user_id: int, chat_id: int, message_text: str = None) -> None:
     user = get_user_session(user_id)

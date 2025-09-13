@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 import os
 
 from utils import parse_callback_data
-from ....session import get_user_session, get_product_session
-from ...input_command_processing import processing_input_command_del
+from ...session import get_user_session, get_product_session
+from ..command_del import processing_input_command_del
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')

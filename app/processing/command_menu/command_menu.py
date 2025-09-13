@@ -7,7 +7,7 @@ import os
 from infra import get_products, get_products_amount
 from utils import format_price_byn
 from config import MAX_AMOUNT_OF_PRODUCTS
-from ....session import get_user_session
+from ...session import get_user_session
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')

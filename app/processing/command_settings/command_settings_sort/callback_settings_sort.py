@@ -3,7 +3,7 @@ import telebot
 from dotenv import load_dotenv
 import os
 
-from app.session import get_user_session
+from ....session import get_user_session
 from .command_settings_sort import processing_command_settings_sort
 
 load_dotenv()

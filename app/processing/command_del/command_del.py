@@ -4,7 +4,7 @@ from telebot import types
 from dotenv import load_dotenv
 import os
 
-from ....session import create_user_session, create_product_session
+from ...session import create_user_session, create_product_session
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
