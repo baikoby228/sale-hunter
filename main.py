@@ -7,7 +7,7 @@ from app import (input_processing, processing_command_start, processing_command_
                  processing_callback_add_marketplace, processing_command_del, processing_callback_del_marketplace,
                  processing_command_set, processing_callback_set_marketplace, processing_command_menu,
                  processing_callback_menu_info, processing_callback_menu_set, processing_callback_menu_del,
-                 processing_command_settings, processing_callback_settings_sort)
+                 processing_command_settings_sort, processing_callback_settings_sort, processing_command_settings)
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -104,7 +104,13 @@ def callback_menu_del_handler(callback) -> None:
     chat_id = callback.message.chat.id
     processing_callback_menu_del(user_id, chat_id, callback.data)
 
-@bot.callback_query_handler(func=lambda callback: len(callback.data) >= 4 and callback.data[:4] == 'sort')
+@bot.callback_query_handler(func=lambda callback: callback.data == 'settings_sort')
+def callback_settings_sort_handler(callback) -> None:
+    user_id = callback.from_user.id
+    chat_id = callback.message.chat.id
+    processing_command_settings_sort(user_id, chat_id)
+
+@bot.callback_query_handler(func=lambda callback: len(callback.data) >= 4 and callback.data[:4] == 'sort' and callback.data.count('_') >= 2)
 def callback_settings_sort_handler(callback) -> None:
     user_id = callback.from_user.id
     chat_id = callback.message.chat.id
@@ -119,8 +125,9 @@ def input_text(message) -> None:
 bot.infinity_polling()
 
 '''
-#from infra.database.connector_products import create_table
-from infra.database.connector_users import create_table
+from infra.database import connector_products
+from infra.database import connector_users
 if __name__ == '__main__':
-    create_table()
+    connector_users.create_table()
+    connector_products.create_table()
 '''

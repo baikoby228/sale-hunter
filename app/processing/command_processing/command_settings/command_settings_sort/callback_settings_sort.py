@@ -1,11 +1,10 @@
 import telebot
-from telebot import types
 
 from dotenv import load_dotenv
 import os
 
-from ....session import get_user_session
-from .command_settings import processing_command_settings
+from app.session import get_user_session
+from .command_settings_sort import processing_command_settings_sort
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -28,7 +27,7 @@ def processing_callback_settings_sort(user_id: int, chat_id: int, callback_data:
         text = 'Порядок сртировки изменён'
     if callback_data == 'sort_reverse_true':
         user.set_sort_reverse(True)
-        text = 'Порядок сртировки изменён'
+        text = 'Порядок сотировки изменён'
 
     bot.send_message(chat_id, text, parse_mode='html')
-    processing_command_settings(user_id, chat_id)
+    processing_command_settings_sort(user_id, chat_id)

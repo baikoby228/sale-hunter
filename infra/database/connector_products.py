@@ -2,7 +2,7 @@ import sqlite3
 from pathlib import Path
 from app.session.product_data.product_data import ProductData
 
-DB_PATH = Path(__file__).parent / 'user_data_base.db'
+DB_PATH = Path(__file__).parent / 'data_base.db'
 
 def create_table() -> None:
     db = sqlite3.connect(DB_PATH)
@@ -196,6 +196,3 @@ def get_product_max_price(user_id: int, marketplace: str, article: int) -> int:
 
 def get_products_amount(user_id: int) -> int:
     return len(get_products(user_id))
-
-if __name__ == '__main__':
-    create_db()

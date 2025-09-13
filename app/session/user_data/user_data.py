@@ -7,7 +7,6 @@ class UserData:
         self.step = start_step
 
         user_data = get_user_data(id)
-
         if not user_data:
             self.sort_type = 'date'
             self.sort_reverse = False

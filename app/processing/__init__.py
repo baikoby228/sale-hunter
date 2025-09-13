@@ -4,8 +4,8 @@ from .command_processing import (processing_command_start, processing_command_he
                                  processing_callback_del_marketplace, processing_command_set,
                                  processing_callback_set_marketplace, processing_command_menu,
                                  processing_callback_menu_info, processing_callback_menu_set,
-                                 processing_callback_menu_del, processing_command_settings,
-                                 processing_callback_settings_sort)
+                                 processing_callback_menu_del, processing_command_settings_sort,
+                                 processing_callback_settings_sort, processing_command_settings)
 from .input_command_processing import (processing_input_command_add, processing_input_command_del,
                                        processing_input_command_set)
 
@@ -15,5 +15,5 @@ __all__ = [
     'processing_callback_del_marketplace', 'processing_input_command_del', 'processing_command_set',
     'processing_callback_set_marketplace', 'processing_input_command_set', 'processing_command_menu',
     'processing_callback_menu_info', 'processing_callback_menu_set', 'processing_callback_menu_del',
-    'processing_command_settings', 'processing_callback_settings_sort'
+    'processing_command_settings_sort', 'processing_callback_settings_sort', 'processing_command_settings'
 ]
