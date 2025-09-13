@@ -1,4 +1,5 @@
 import telebot
+from telebot import types
 
 from dotenv import load_dotenv
 import os
@@ -49,8 +50,13 @@ def processing_input_command_set(user_id: int, chat_id: int, message_text: str =
             processing_input_command_set(user_id, chat_id, message_text)
         case 2:
             set_product_max_price(user_id, product.marketplace, product.article, product.max_price)
+
+            markup = types.InlineKeyboardMarkup()
+            button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
+            markup.row(button_menu)
+
             text = 'Новая цена отслеживания установлена'
-            bot.send_message(chat_id, text, parse_mode='html')
+            bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
 
             del_user_session(user_id)
             del_product_session(user_id)

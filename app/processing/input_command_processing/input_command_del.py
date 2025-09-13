@@ -1,4 +1,5 @@
 import telebot
+from telebot import types
 
 from dotenv import load_dotenv
 import os
@@ -34,8 +35,13 @@ def processing_input_command_del(user_id: int, chat_id: int, message_text: str =
             processing_input_command_del(user_id, chat_id, message_text)
         case 1:
             del_product(user_id, product.marketplace, product.article)
+
+            markup = types.InlineKeyboardMarkup()
+            button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
+            markup.row(button_menu)
+
             text = 'Товар удалён из списка отслеживаемых'
-            bot.send_message(chat_id, text, parse_mode='html')
+            bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
 
             del_user_session(user_id)
             del_product_session(user_id)

@@ -20,12 +20,11 @@ def processing_command_menu(user_id: int, chat_id: int) -> None:
     amount = get_products_amount(user_id)
     products = get_products(user_id)
 
-    if user.sort_type == 'date':
-        products.sort(key=lambda product: product.add_time, reverse=user.sort_reverse)
-    if user.sort_type == 'current_price':
-        products.sort(key=lambda product: product.current_price, reverse=user.sort_reverse)
-
     markup = types.InlineKeyboardMarkup()
+
+    button_settings = types.InlineKeyboardButton('Настройки сортировки', callback_data='settings_sort')
+    markup.row(button_settings)
+
     if len(products) == 0:
         button_add = types.InlineKeyboardButton('Добавить товар', callback_data='add')
         markup.row(button_add)
@@ -36,6 +35,11 @@ def processing_command_menu(user_id: int, chat_id: int) -> None:
     )
 
     bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
+
+    if user.sort_type == 'date':
+        products.sort(key=lambda product: product.add_time, reverse=user.sort_reverse)
+    if user.sort_type == 'current_price':
+        products.sort(key=lambda product: product.current_price, reverse=user.sort_reverse)
 
     for i in range(len(products)):
         product = products[i]

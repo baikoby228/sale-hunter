@@ -1,4 +1,5 @@
 import telebot
+from telebot import types
 from datetime import datetime
 
 from dotenv import load_dotenv
@@ -77,8 +78,12 @@ def processing_input_command_add(user_id: int, chat_id: int, message_text: str =
             product.add_time = str(datetime.now())
             add_product(user_id, product)
 
+            markup = types.InlineKeyboardMarkup()
+            button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
+            markup.row(button_menu)
+
             text = 'Товар добавлен в список отслеживаемых'
-            bot.send_message(chat_id, text, parse_mode='html')
+            bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
 
             del_user_session(user_id)
             del_product_session(user_id)
