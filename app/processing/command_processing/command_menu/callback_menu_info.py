@@ -36,6 +36,9 @@ def processing_callback_menu_info(user_id: int, chat_id: int, callback_data: str
 
     markup.row(button_set, button_del)
 
+    button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
+    markup.row(button_menu)
+
     text = (
         f'{product.marketplace.upper()} <code>{product.article}</code> <a href="{url}">ссылка</a>\n'
         f'Отслеживаемая цена - {format_price_byn(product.max_price)}\n'

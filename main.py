@@ -6,8 +6,8 @@ import os
 from app import (input_processing, processing_command_start, processing_command_help, processing_command_add,
                  processing_callback_add_marketplace, processing_command_del, processing_callback_del_marketplace,
                  processing_command_set, processing_callback_set_marketplace, processing_command_menu,
-                 processing_callback_menu_info, processing_callback_menu_set, processing_callback_menu_del)
-from infra import create_table
+                 processing_callback_menu_info, processing_callback_menu_set, processing_callback_menu_del,
+                 processing_command_settings, processing_callback_settings_sort)
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -50,11 +50,23 @@ def command_menu_handler(message) -> None:
     chat_id = message.chat.id
     processing_command_menu(user_id, chat_id)
 
+@bot.message_handler(commands=['settings'])
+def command_settings_handler(message) -> None:
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+    processing_command_settings(user_id, chat_id)
+
 @bot.callback_query_handler(func=lambda callback: callback.data in ['add'])
 def callback_add_handler(callback) -> None:
     user_id = callback.from_user.id
     chat_id = callback.message.chat.id
     processing_command_add(user_id, chat_id)
+
+@bot.callback_query_handler(func=lambda callback: callback.data in ['menu'])
+def callback_add_handler(callback) -> None:
+    user_id = callback.from_user.id
+    chat_id = callback.message.chat.id
+    processing_command_menu(user_id, chat_id)
 
 @bot.callback_query_handler(func=lambda callback: callback.data in ['add_wb'])
 def callback_add_marketplace_handler(callback) -> None:
@@ -92,26 +104,11 @@ def callback_menu_del_handler(callback) -> None:
     chat_id = callback.message.chat.id
     processing_callback_menu_del(user_id, chat_id, callback.data)
 
-#
-from app.session import get_user_session
-
-@bot.message_handler(commands=['tp'])
-def pox1(message):
-    user_id = message.from_user.id
-    chat_id = message.chat.id
-    user = get_user_session(user_id)
-    if user.sort_type == 'date':
-        user.sort_type = 'price'
-    else:
-        user.sort_type = 'date'
-
-@bot.message_handler(commands=['f'])
-def pox2(message):
-    user_id = message.from_user.id
-    chat_id = message.chat.id
-    user = get_user_session(user_id)
-    user.sort_reverse = not user.sort_reverse
-#
+@bot.callback_query_handler(func=lambda callback: len(callback.data) >= 4 and callback.data[:4] == 'sort')
+def callback_settings_sort_handler(callback) -> None:
+    user_id = callback.from_user.id
+    chat_id = callback.message.chat.id
+    processing_callback_settings_sort(user_id, chat_id, callback.data)
 
 @bot.message_handler(content_types=['text'])
 def input_text(message) -> None:
