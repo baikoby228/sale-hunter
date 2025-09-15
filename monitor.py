@@ -1,7 +1,7 @@
 import time
 import random
 
-from config import ITERATION_TIME, DELTA
+from config import CYCLE_TIME, CYCLE_TIME_DELTA,  REQUEST_TIME_DELTA
 from infra import get_products_amount, get_products, set_product_current_price
 from app import wb_parser, send_notification
 
@@ -12,7 +12,7 @@ while True:
     if products_amount == 0:
         time.sleep(1)
         continue
-    request_time = ITERATION_TIME / products_amount
+    request_time = CYCLE_TIME / products_amount
 
     products = get_products()
     found_prices = {}
@@ -39,8 +39,8 @@ while True:
                 product.current_price = current_price
                 send_notification(product)
 
-        current_request_time = request_time * (1 + random.uniform(-DELTA, DELTA))
+        current_request_time = request_time * (1 + random.uniform(-REQUEST_TIME_DELTA, REQUEST_TIME_DELTA))
         while time.time() - start_request_time < current_request_time:
             time.sleep(0.11)
-    while time.time() - start_time < ITERATION_TIME:
+    while time.time() - start_time < CYCLE_TIME * (1 + random.uniform(0, CYCLE_TIME_DELTA)):
         time.sleep(1.01)
