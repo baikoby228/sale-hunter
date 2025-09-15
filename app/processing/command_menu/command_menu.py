@@ -46,14 +46,14 @@ def processing_command_menu(user_id: int, chat_id: int) -> None:
 
         markup = types.InlineKeyboardMarkup()
 
-        button_info = types.InlineKeyboardButton(f'{product.marketplace.upper()} - {product.article}', callback_data=f'info_wb_{product.article}')
+        button_info = types.InlineKeyboardButton(f'{product.marketplace.upper()} - {product.article}', callback_data=f'info_{product.marketplace}_{product.article}')
         markup.row(button_info)
 
         text = 'изменить'
-        button_set = types.InlineKeyboardButton(text, callback_data=f'set_wb_{product.article}')
+        button_set = types.InlineKeyboardButton(text, callback_data=f'set_{product.marketplace}_{product.article}')
 
         text = 'удалить'
-        button_del = types.InlineKeyboardButton(text, callback_data=f'del_wb_{product.article}')
+        button_del = types.InlineKeyboardButton(text, callback_data=f'del_{product.marketplace}_{product.article}')
 
         markup.row(button_set, button_del)
 
