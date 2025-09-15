@@ -1,9 +1,9 @@
-from .product_data import ProductData
+from models import ProductData
 
 session = {}
 
 def create_product_session(id: int) -> None:
-    session[id] = ProductData()
+    session[id] = ProductData(id)
 
 def get_product_session(id: int) -> ProductData:
     if not id in session:

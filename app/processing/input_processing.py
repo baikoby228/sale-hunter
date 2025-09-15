@@ -4,7 +4,7 @@ from .command_del import processing_input_command_del
 from .command_set import processing_input_command_set
 
 def input_processing(user_id: int, chat_id: int, message_text: str = None) -> None:
-    user = get_user_session(user_id)
+    user = get_user_session(user_id, chat_id)
     current_type = user.type
 
     match current_type:

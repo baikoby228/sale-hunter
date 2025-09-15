@@ -10,6 +10,7 @@ def create_table() -> None:
     c.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY,
+            chat_id INTEGER,
             sort_type TEXT,
             sort_reverse BOOLEAN
             )
@@ -23,7 +24,7 @@ def get_user_data(id: int):
     c = db.cursor()
 
     c.execute("""
-        SELECT sort_type, sort_reverse FROM users
+        SELECT chat_id, sort_type, sort_reverse FROM users
         WHERE id = ?
         """, (id,))
 
@@ -34,11 +35,11 @@ def get_user_data(id: int):
 
     return res if res else None
 
-def set_user_data(id: int, sort_type: str, sort_reverse: bool) -> None:
+def set_user_data(id: int, chat_id: int, sort_type: str, sort_reverse: bool) -> None:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
-    c.execute("INSERT OR REPLACE INTO users VALUES (?, ?, ?)", (id, sort_type, sort_reverse))
+    c.execute("INSERT OR REPLACE INTO users VALUES (?, ?, ?, ?)", (id, chat_id, sort_type, sort_reverse))
 
     db.commit()
     db.close()

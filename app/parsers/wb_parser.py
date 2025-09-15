@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import fake_useragent
 
 from utils import find_number
-from ..session import ProductData
+from models import ProductData
 
 def get_html(article) -> str | None:
     url = f'https://www.wildberries.by/catalog/{article}/detail.aspx'

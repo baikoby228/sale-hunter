@@ -1,4 +1,6 @@
 class ProductData:
+    user_id: int
+
     marketplace: str
     article: int
 
@@ -10,8 +12,9 @@ class ProductData:
 
     max_price: int
 
-    def __init__(self, marketplace = None, article = None, name = None, photo_url = None, current_price = None,
-                 start_price = None, add_time = None, max_price = None):
+    def __init__(self, user_id = None, marketplace = None, article = None, name = None, photo_url = None,
+                 current_price = None, start_price = None, add_time = None, max_price = None):
+        self.user_id = user_id
         self.marketplace = marketplace
         self.article = article
         self.name = name

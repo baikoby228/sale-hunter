@@ -22,7 +22,6 @@ def processing_callback_menu_info(user_id: int, chat_id: int, callback_data: str
 
     product = get_product(user_id, marketplace, article)
 
-    url = f'https://www.wildberries.by/catalog/{product.article}/detail.aspx'
     caption = f'{product.name}'
     bot.send_photo(chat_id, photo=product.photo_url, caption=caption, parse_mode='html')
 
@@ -39,6 +38,7 @@ def processing_callback_menu_info(user_id: int, chat_id: int, callback_data: str
     button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
     markup.row(button_menu)
 
+    url = f'https://www.wildberries.by/catalog/{product.article}/detail.aspx'
     text = (
         f'{product.marketplace.upper()} <code>{product.article}</code> <a href="{url}">ссылка</a>\n'
         f'Отслеживаемая цена - {format_price_byn(product.max_price)}\n'
