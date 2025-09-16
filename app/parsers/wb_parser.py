@@ -30,7 +30,7 @@ def get_html(article) -> str | None:
 
     driver.get(url)
 
-    wait = WebDriverWait(driver, 30)
+    wait = WebDriverWait(driver, 10)
 
     '''
     time.sleep(30)
@@ -42,6 +42,18 @@ def get_html(article) -> str | None:
         EC.presence_of_element_located((By.CLASS_NAME, "content404")),
         EC.presence_of_element_located((By.CLASS_NAME, "productTitle--J2W7I"))
     ))
+
+    try:
+        wait.until(EC.any_of(
+            EC.presence_of_element_located((By.CLASS_NAME, "content404")),
+            EC.presence_of_element_located((By.CLASS_NAME, "productTitle--J2W7I"))
+        ))
+    except TimeoutException:
+        driver.refresh()
+        wait.until(EC.any_of(
+            EC.presence_of_element_located((By.CLASS_NAME, "content404")),
+            EC.presence_of_element_located((By.CLASS_NAME, "productTitle--J2W7I"))
+        ))
 
     if driver.find_elements(By.CLASS_NAME, "content404"):
         return None
