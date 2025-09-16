@@ -41,6 +41,6 @@ while True:
 
         current_request_time = request_time * (1 + random.uniform(-REQUEST_TIME_DELTA, REQUEST_TIME_DELTA))
         while time.time() - start_request_time < current_request_time:
-            time.sleep(0.11)
+            time.sleep(0.17)
     while time.time() - start_time < CYCLE_TIME * (1 + random.uniform(0, CYCLE_TIME_DELTA)):
-        time.sleep(1.01)
+        time.sleep(0.97)
