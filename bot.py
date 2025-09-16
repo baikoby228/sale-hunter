@@ -14,6 +14,13 @@ API_TOKEN = os.getenv('API_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
+from test import add_test_products
+@bot.message_handler(commands=['test'])
+def command_start_handler(message) -> None:
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+    add_test_products(user_id, chat_id)
+
 @bot.message_handler(commands=['start'])
 def command_start_handler(message) -> None:
     user_id = message.from_user.id

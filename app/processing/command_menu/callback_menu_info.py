@@ -4,6 +4,7 @@ from telebot import types
 from dotenv import load_dotenv
 import os
 
+from config import INF
 from infra import get_product
 from utils import format_price_byn, parse_callback_data
 from ...session import get_user_session
@@ -38,12 +39,24 @@ def processing_callback_menu_info(user_id: int, chat_id: int, callback_data: str
     button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
     markup.row(button_menu)
 
+    string_current_price: str
+    if product.current_price == INF:
+        string_current_price = 'Товара нету в наличии\n'
+    else:
+        string_current_price = f'Текущая цена - {format_price_byn(product.current_price)}\n'
+
+    string_start_price: str
+    if product.start_price == INF:
+        string_start_price = 'Товара изначально не было в наличии\n'
+    else:
+        string_start_price = f'Стартовая цена - {format_price_byn(product.start_price)}\n'
+
     url = f'https://www.wildberries.by/catalog/{product.article}/detail.aspx'
     text = (
         f'{product.marketplace.upper()} <code>{product.article}</code> <a href="{url}">ссылка</a>\n'
         f'Отслеживаемая цена - {format_price_byn(product.max_price)}\n'
-        f'Текущая цена - {format_price_byn(product.current_price)}\n'
-        f'Стартовая цена - {format_price_byn(product.start_price)}\n'
+        f'{string_current_price}'
+        f'{string_start_price}'
         f'Время добавления в спиоск отслеживаемых товаров:\n{product.add_time[:16]}'
     )
     bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)

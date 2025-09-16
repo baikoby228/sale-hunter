@@ -6,7 +6,7 @@ import os
 
 from infra import get_products, get_products_amount
 from utils import format_price_byn
-from config import MAX_AMOUNT_OF_PRODUCTS
+from config import MAX_AMOUNT_OF_PRODUCTS, INF
 from ...session import get_user_session
 
 load_dotenv()
@@ -61,8 +61,14 @@ def processing_command_menu(user_id: int, chat_id: int) -> None:
             button_add = types.InlineKeyboardButton('Добавить товар', callback_data='add')
             markup.row(button_add)
 
+        string_current_price: str
+        if product.current_price == INF:
+            string_current_price = 'нету в наличии'
+        else:
+            string_current_price = f'{format_price_byn(product.current_price)}'
+
         text = (
             f'{product.name[:min(len(product.name), 17)]}...\n'
-            f'{format_price_byn(product.max_price)} - {format_price_byn(product.current_price)}'
+            f'{format_price_byn(product.max_price)} - {string_current_price}'
         )
         bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)

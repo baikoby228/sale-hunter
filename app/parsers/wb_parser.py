@@ -3,11 +3,24 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+
 from bs4 import BeautifulSoup
 import fake_useragent
 
+from config import INF, MAX_AMOUNT_OF_RETRIES
 from utils import find_number
 from models import ProductData
+
+import os
+from datetime import datetime
+def save_debug_screenshot(driver, prefix="retry_fail"):
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    filename = f"{prefix}_{timestamp}.png"
+    os.makedirs("screenshots", exist_ok=True)
+    path = os.path.join("screenshots", filename)
+    driver.save_screenshot(path)
+    print(f'path - {path}')
 
 def get_html(article) -> str | None:
     url = f'https://www.wildberries.by/catalog/{article}/detail.aspx'
@@ -38,31 +51,35 @@ def get_html(article) -> str | None:
         file.write(driver.page_source)
     '''
 
-    wait.until(EC.any_of(
-        EC.presence_of_element_located((By.CLASS_NAME, "content404")),
-        EC.presence_of_element_located((By.CLASS_NAME, "productTitle--J2W7I"))
-    ))
-
-    try:
-        wait.until(EC.any_of(
-            EC.presence_of_element_located((By.CLASS_NAME, "content404")),
-            EC.presence_of_element_located((By.CLASS_NAME, "productTitle--J2W7I"))
-        ))
-    except TimeoutException:
-        driver.refresh()
-        wait.until(EC.any_of(
-            EC.presence_of_element_located((By.CLASS_NAME, "content404")),
-            EC.presence_of_element_located((By.CLASS_NAME, "productTitle--J2W7I"))
-        ))
+    success = False
+    for i in range(MAX_AMOUNT_OF_RETRIES):
+        try:
+            wait.until(EC.any_of(
+                EC.presence_of_element_located((By.CLASS_NAME, "content404")),
+                EC.presence_of_element_located((By.CLASS_NAME, "productTitle--J2W7I")),
+                EC.presence_of_element_located((By.CLASS_NAME, "soldOutProductText--hhsT1"))
+            ))
+            success = True
+            break
+        except TimeoutException:
+            driver.refresh()
 
     if driver.find_elements(By.CLASS_NAME, "content404"):
         return None
+
+    if not success:
+        save_debug_screenshot(driver, prefix="element_not_found")
+        raise TimeoutException("Не нашёл")
 
     wait.until(EC.any_of(
         EC.presence_of_element_located((By.CLASS_NAME, "verticalSlide--fBKUm")),
         EC.presence_of_element_located((By.CLASS_NAME, "miniatureSlide--acvJc"))
     ))
-    wait.until(EC.presence_of_element_located((By.CLASS_NAME, "priceBlockFinalPrice--iToZR")))
+
+    wait.until(EC.any_of(
+        EC.presence_of_element_located((By.CLASS_NAME, "priceBlockFinalPrice--iToZR")),
+        EC.presence_of_element_located((By.CLASS_NAME, "soldOutProductText--hhsT1"))
+    ))
 
     return driver.page_source
 
@@ -72,7 +89,12 @@ def get_product(html) -> ProductData:
     soup = BeautifulSoup(html, "lxml")
 
     res.name = soup.find("h1", class_='productTitle--J2W7I').text
-    res.current_price = find_number(soup.find("ins", class_='priceBlockFinalPrice--iToZR').text)
+
+    price_block = soup.find("ins", class_='priceBlockFinalPrice--iToZR')
+    if not price_block:
+        res.current_price = INF
+    else:
+        res.current_price = find_number(price_block.text)
 
     flag = True
     wrapper = soup.find("div", class_='swiper-wrapper verticalWrapper--K5LVG')

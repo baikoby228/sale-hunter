@@ -17,4 +17,5 @@ def get_user_session(id: int, chat_id: int = None, type: str = 'None', start_ste
     return session[id]
 
 def del_user_session(id: int) -> None:
-    del session[id]
+    if id in session:
+        del session[id]
