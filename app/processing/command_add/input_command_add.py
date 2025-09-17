@@ -32,7 +32,7 @@ async def processing_input_command_add(user_id: int, chat_id: int, message_text:
                 text = 'Товар с эти артикулом уже отслеживается'
 
                 markup = InlineKeyboardMarkup(inline_keyboard=[])
-                button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+                button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
                 await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
@@ -55,7 +55,7 @@ async def processing_input_command_add(user_id: int, chat_id: int, message_text:
 
             if not pr:
                 markup = InlineKeyboardMarkup(inline_keyboard=[])
-                button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+                button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
                 text = 'Артикул невалиден'
@@ -72,7 +72,7 @@ async def processing_input_command_add(user_id: int, chat_id: int, message_text:
 
             if product.current_price <= product.max_price:
                 markup = InlineKeyboardMarkup(inline_keyboard=[])
-                button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+                button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
                 text = 'Цена товар на данный момент не превышает отслеживаемую цену'
@@ -89,7 +89,7 @@ async def processing_input_command_add(user_id: int, chat_id: int, message_text:
             await add_product(product)
 
             markup = InlineKeyboardMarkup(inline_keyboard=[])
-            button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+            button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
             markup.inline_keyboard.append([button_menu])
 
             text = 'Товар добавлен в список отслеживаемых'

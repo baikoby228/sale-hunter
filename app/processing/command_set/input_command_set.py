@@ -28,7 +28,7 @@ async def processing_input_command_set(user_id: int, chat_id: int, message_text:
 
             if not await check_product(user_id, product.marketplace, product.article):
                 markup = InlineKeyboardMarkup(inline_keyboard=[])
-                button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+                button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
                 text = 'Товара нету в списке отслеживаемых'
@@ -47,7 +47,7 @@ async def processing_input_command_set(user_id: int, chat_id: int, message_text:
             current_price = await get_product_current_price(user_id, product.marketplace, product.article)
             if current_price <= product.max_price:
                 markup = InlineKeyboardMarkup(inline_keyboard=[])
-                button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+                button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
                 text = 'Цена товар на данный момент не превышает отслеживаемую цены'
@@ -63,7 +63,7 @@ async def processing_input_command_set(user_id: int, chat_id: int, message_text:
             await set_product_max_price(user_id, product.marketplace, product.article, product.max_price)
 
             markup = InlineKeyboardMarkup(inline_keyboard=[])
-            button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+            button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
             markup.inline_keyboard.append([button_menu])
 
             text = 'Новая цена отслеживания установлена'

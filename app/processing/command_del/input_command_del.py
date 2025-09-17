@@ -28,7 +28,7 @@ async def processing_input_command_del(user_id: int, chat_id: int, message_text:
 
             if not await check_product(user_id, product.marketplace, product.article):
                 markup = InlineKeyboardMarkup(inline_keyboard=[])
-                button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+                button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
                 text = 'Товара нету в списке отслеживаемых'
@@ -44,7 +44,7 @@ async def processing_input_command_del(user_id: int, chat_id: int, message_text:
             await del_product(user_id, product.marketplace, product.article)
 
             markup = InlineKeyboardMarkup(inline_keyboard=[])
-            button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+            button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
             markup.inline_keyboard.append([button_menu])
 
             text = 'Товар удалён из списка отслеживаемых'

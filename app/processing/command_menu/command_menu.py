@@ -25,11 +25,11 @@ async def processing_command_menu(user_id: int, chat_id: int) -> None:
 
     markup = InlineKeyboardMarkup(inline_keyboard=[])
 
-    button_settings = InlineKeyboardButton(text='Настройки сортировки', callback_data='settings_sort')
+    button_settings = InlineKeyboardButton(text='⚙️ Настройки сортировки', callback_data='settings_sort')
     markup.inline_keyboard.append([button_settings])
 
     if len(products) == 0:
-        button_add = InlineKeyboardButton(text='Добавить товар', callback_data='add')
+        button_add = InlineKeyboardButton(text='➕ Добавить товар', callback_data='add')
         markup.inline_keyboard.append([button_add])
 
     text = (
@@ -49,20 +49,29 @@ async def processing_command_menu(user_id: int, chat_id: int) -> None:
 
         markup = InlineKeyboardMarkup(inline_keyboard=[])
 
-        text = f'{product.marketplace.upper()} - {product.article}'
+        emoji1 = ''
+        emoji2 = ''
+        if product.marketplace == 'wb':
+            emoji1 = '🟣'
+            emoji2 = '🟣'
+        if product.marketplace == 'ozon':
+            emoji1 = '🔵'
+            emoji2 = '🔴'
+
+        text = f'{emoji1} {product.marketplace.upper()} - {product.article} {emoji2}'
         button_info = InlineKeyboardButton(text=text, callback_data=f'info_{product.marketplace}_{product.article}')
         markup.inline_keyboard.append([button_info])
 
-        text = 'изменить'
+        text = '✏️ Изменить'
         button_set = InlineKeyboardButton(text=text, callback_data=f'set_{product.marketplace}_{product.article}')
 
-        text = 'удалить'
+        text = '🗑️ Удалить'
         button_del = InlineKeyboardButton(text=text, callback_data=f'del_{product.marketplace}_{product.article}')
 
         markup.inline_keyboard.append([button_set, button_del])
 
         if i == len(products) - 1 and amount != MAX_AMOUNT_OF_PRODUCTS:
-            button_add = InlineKeyboardButton(text='Добавить товар', callback_data='add')
+            button_add = InlineKeyboardButton(text='➕ Добавить товар', callback_data='add')
             markup.inline_keyboard.append([button_add])
 
         string_current_price: str

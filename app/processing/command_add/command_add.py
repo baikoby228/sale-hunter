@@ -26,7 +26,7 @@ async def processing_command_add(user_id: int, chat_id: int) -> None:
     await create_product_session(user_id)
 
     markup = InlineKeyboardMarkup(inline_keyboard=[])
-    button_wb = InlineKeyboardButton(text='Wildberries', callback_data='add_wb')
+    button_wb = InlineKeyboardButton(text='🟣 Wildberries 🟣', callback_data='add_wb')
     markup.inline_keyboard.append([button_wb])
 
     text = 'Выберите маркетплейс для отслеживания товара'

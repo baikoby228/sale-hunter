@@ -19,17 +19,17 @@ async def processing_command_settings_sort(user_id: int, chat_id: int) -> None:
 
     markup = InlineKeyboardMarkup(inline_keyboard=[])
 
-    button_date = InlineKeyboardButton(text='По дате', callback_data='sort_type_date')
+    button_date = InlineKeyboardButton(text='📆 По дате', callback_data='sort_type_date')
     markup.inline_keyboard.append([button_date])
 
-    button_current_price = InlineKeyboardButton(text='По текущей цене', callback_data='sort_type_current_price')
+    button_current_price = InlineKeyboardButton(text='💰 По текущей цене', callback_data='sort_type_current_price')
     markup.inline_keyboard.append([button_current_price])
 
-    button_sort_false = InlineKeyboardButton(text='По возрастанию', callback_data='sort_reverse_false')
-    button_sort_true = InlineKeyboardButton(text='По убыванию', callback_data='sort_reverse_true')
+    button_sort_false = InlineKeyboardButton(text='🔼 По возрастанию', callback_data='sort_reverse_false')
+    button_sort_true = InlineKeyboardButton(text='🔽 По убыванию', callback_data='sort_reverse_true')
     markup.inline_keyboard.append([button_sort_false, button_sort_true])
 
-    button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+    button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
     markup.inline_keyboard.append([button_menu])
 
     text_sort_type: str
