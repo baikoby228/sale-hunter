@@ -1,5 +1,6 @@
-import telebot
-from telebot import types
+import logging
+from aiogram import Bot
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from dotenv import load_dotenv
 import os
@@ -12,32 +13,36 @@ from ...session import get_user_session
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
 
-bot = telebot.TeleBot(API_TOKEN)
+logging.basicConfig(level=logging.INFO)
 
-def processing_callback_menu_info(user_id: int, chat_id: int, callback_data: str):
-    user = get_user_session(user_id)
+bot = Bot(token=API_TOKEN)
+
+async def processing_callback_menu_info(user_id: int, chat_id: int, callback_data: str):
+    user = await get_user_session(user_id)
 
     a = parse_callback_data(callback_data)
     marketplace = a[1]
     article = int(a[2])
 
-    product = get_product(user_id, marketplace, article)
+    product = await get_product(user_id, marketplace, article)
+    if product is None:
+        return
 
     caption = f'{product.name}'
-    bot.send_photo(chat_id, photo=product.photo_url, caption=caption, parse_mode='html')
+    await bot.send_photo(chat_id, photo=product.photo_url, caption=caption, parse_mode='html')
 
-    markup = types.InlineKeyboardMarkup()
+    markup = InlineKeyboardMarkup(inline_keyboard=[])
 
     text = 'изменить'
-    button_set = types.InlineKeyboardButton(text, callback_data=f'set_wb_{product.article}')
+    button_set = InlineKeyboardButton(text=text, callback_data=f'set_wb_{product.article}')
 
     text = 'удалить'
-    button_del = types.InlineKeyboardButton(text, callback_data=f'del_wb_{product.article}')
+    button_del = InlineKeyboardButton(text=text, callback_data=f'del_wb_{product.article}')
 
-    markup.row(button_set, button_del)
+    markup.inline_keyboard.append([button_set, button_del])
 
-    button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
-    markup.row(button_menu)
+    button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+    markup.inline_keyboard.append([button_menu])
 
     string_current_price: str
     if product.current_price == INF:
@@ -57,6 +62,6 @@ def processing_callback_menu_info(user_id: int, chat_id: int, callback_data: str
         f'Отслеживаемая цена - {format_price_byn(product.max_price)}\n'
         f'{string_current_price}'
         f'{string_start_price}'
-        f'Время добавления в спиоск отслеживаемых товаров:\n{product.add_time[:16]}'
+        f'Время добавления в список отслеживаемых товаров:\n{product.add_time[:16]}'
     )
-    bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
+    await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)

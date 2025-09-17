@@ -3,7 +3,7 @@ from pathlib import Path
 
 DB_PATH = Path(__file__).parent / 'data_base.db'
 
-def create_table() -> None:
+async def create_table() -> None:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -19,7 +19,7 @@ def create_table() -> None:
     db.commit()
     db.close()
 
-def get_user_data(id: int):
+async def get_user_data(id: int):
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -35,7 +35,7 @@ def get_user_data(id: int):
 
     return res if res else None
 
-def set_user_data(id: int, chat_id: int, sort_type: str, sort_reverse: bool) -> None:
+async def set_user_data(id: int, chat_id: int, sort_type: str, sort_reverse: bool) -> None:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 

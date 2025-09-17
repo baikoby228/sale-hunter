@@ -7,19 +7,19 @@ class UserData:
         self.type = type
         self.step = start_step
 
-        user_data = get_user_data(id)
+    async def init(self):
+        user_data = await get_user_data(self.id)
         if not user_data:
             self.sort_type = 'date'
             self.sort_reverse = False
         else:
             pox, self.sort_type, self.sort_reverse = user_data
+        await set_user_data(self.id, self.chat_id, self.sort_type, self.sort_reverse)
 
-        set_user_data(self.id, self.chat_id, self.sort_type, self.sort_reverse)
-
-    def set_sort_type(self, new_sort_type: str) -> None:
+    async def set_sort_type(self, new_sort_type: str) -> None:
         self.sort_type = new_sort_type
-        set_user_data(self.id, self.chat_id, self.sort_type, self.sort_reverse)
+        await set_user_data(self.id, self.chat_id, self.sort_type, self.sort_reverse)
 
-    def set_sort_reverse(self, new_sort_reverse: bool) -> None:
+    async def set_sort_reverse(self, new_sort_reverse: bool) -> None:
         self.sort_reverse = new_sort_reverse
-        set_user_data(self.id, self.chat_id, self.sort_type, self.sort_reverse)
+        await set_user_data(self.id, self.chat_id, self.sort_type, self.sort_reverse)

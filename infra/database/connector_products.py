@@ -4,7 +4,7 @@ from models.product_data import ProductData
 
 DB_PATH = Path(__file__).parent / 'data_base.db'
 
-def create_table() -> None:
+async def create_table() -> None:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -26,7 +26,7 @@ def create_table() -> None:
     db.commit()
     db.close()
 
-def add_product(product: ProductData) -> None:
+async def add_product(product: ProductData) -> None:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -57,7 +57,7 @@ def add_product(product: ProductData) -> None:
     db.commit()
     db.close()
 
-def get_products(user_id: int = None) -> list[ProductData]:
+async def get_products(user_id: int = None) -> list[ProductData]:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -98,7 +98,7 @@ def get_products(user_id: int = None) -> list[ProductData]:
 
     return [ProductData(*row) for row in rows]
 
-def get_product(user_id: int, marketplace: str, article: int) -> ProductData:
+async def get_product(user_id: int, marketplace: str, article: int) -> ProductData | None:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -122,9 +122,9 @@ def get_product(user_id: int, marketplace: str, article: int) -> ProductData:
     db.commit()
     db.close()
 
-    return ProductData(*res)
+    return ProductData(*res) if res else None
 
-def del_product(user_id: int, marketplace: str, article: int) -> None:
+async def del_product(user_id: int, marketplace: str, article: int) -> None:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -136,7 +136,7 @@ def del_product(user_id: int, marketplace: str, article: int) -> None:
     db.commit()
     db.close()
 
-def check_product(user_id: int, marketplace: str, article: int) -> bool:
+async def check_product(user_id: int, marketplace: str, article: int) -> bool:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -153,7 +153,7 @@ def check_product(user_id: int, marketplace: str, article: int) -> bool:
 
     return res is not None
 
-def get_products_amount(user_id: int = None) -> int:
+async def get_products_amount(user_id: int = None) -> int:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -169,7 +169,7 @@ def get_products_amount(user_id: int = None) -> int:
 
     return res
 
-def set_product_current_price(user_id: int, marketplace: str, article: int, new_current_price: int) -> None:
+async def set_product_current_price(user_id: int, marketplace: str, article: int, new_current_price: int) -> None:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -182,7 +182,7 @@ def set_product_current_price(user_id: int, marketplace: str, article: int, new_
     db.commit()
     db.close()
 
-def get_product_current_price(user_id: int, marketplace: str, article: int) -> int:
+async def get_product_current_price(user_id: int, marketplace: str, article: int) -> int:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -198,7 +198,7 @@ def get_product_current_price(user_id: int, marketplace: str, article: int) -> i
 
     return row[0]
 
-def set_product_max_price(user_id: int, marketplace: str, article: int, new_max_price: int) -> None:
+async def set_product_max_price(user_id: int, marketplace: str, article: int, new_max_price: int) -> None:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 
@@ -211,7 +211,7 @@ def set_product_max_price(user_id: int, marketplace: str, article: int, new_max_
     db.commit()
     db.close()
 
-def get_product_max_price(user_id: int, marketplace: str, article: int) -> int:
+async def get_product_max_price(user_id: int, marketplace: str, article: int) -> int:
     db = sqlite3.connect(DB_PATH)
     c = db.cursor()
 

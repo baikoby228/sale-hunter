@@ -1,5 +1,6 @@
-import telebot
-from telebot import types
+import logging
+from aiogram import Bot
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from dotenv import load_dotenv
 import os
@@ -9,21 +10,23 @@ from ...session import get_user_session
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
 
-bot = telebot.TeleBot(API_TOKEN)
+logging.basicConfig(level=logging.INFO)
 
-def processing_command_settings(user_id: int, chat_id: int) -> None:
-    user = get_user_session(user_id)
+bot = Bot(token=API_TOKEN)
 
-    markup = types.InlineKeyboardMarkup()
+async def processing_command_settings(user_id: int, chat_id: int) -> None:
+    user = await get_user_session(user_id)
 
-    button_language = types.InlineKeyboardButton('Язык', callback_data='settings_language')
-    markup.row(button_language)
+    markup = InlineKeyboardMarkup(inline_keyboard=[])
 
-    button_sort = types.InlineKeyboardButton('Сортировка отслеживаемых товаров', callback_data='settings_sort')
-    markup.row(button_sort)
+    button_language = InlineKeyboardButton(text='Язык', callback_data='settings_language')
+    markup.inline_keyboard.append([button_language])
 
-    button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
-    markup.row(button_menu)
+    button_sort = InlineKeyboardButton(text='Сортировка отслеживаемых товаров', callback_data='settings_sort')
+    markup.inline_keyboard.append([button_sort])
+
+    button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+    markup.inline_keyboard.append([button_menu])
 
     text = 'Выберите раздел настроек'
-    bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
+    await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)

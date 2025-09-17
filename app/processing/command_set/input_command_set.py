@@ -1,5 +1,6 @@
-import telebot
-from telebot import types
+import logging
+from aiogram import Bot
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from dotenv import load_dotenv
 import os
@@ -11,60 +12,62 @@ from ...session import get_user_session, del_user_session, get_product_session, 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
 
-bot = telebot.TeleBot(API_TOKEN)
+logging.basicConfig(level=logging.INFO)
 
-def processing_input_command_set(user_id: int, chat_id: int, message_text: str = None) -> None:
-    user = get_user_session(user_id)
+bot = Bot(token=API_TOKEN)
+
+async def processing_input_command_set(user_id: int, chat_id: int, message_text: str = None) -> None:
+    user = await get_user_session(user_id)
     current_step = user.step
 
-    product = get_product_session(user_id)
+    product = await get_product_session(user_id)
 
     match current_step:
         case 0:
             product.article = find_number(message_text)
 
-            if not check_product(user_id, product.marketplace, product.article):
-                markup = types.InlineKeyboardMarkup()
-                button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
-                markup.row(button_menu)
+            if not await check_product(user_id, product.marketplace, product.article):
+                markup = InlineKeyboardMarkup(inline_keyboard=[])
+                button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+                markup.inline_keyboard.append([button_menu])
 
                 text = 'Товара нету в списке отслеживаемых'
-                bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
+                await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
-                del_user_session(user_id)
-                del_product_session(user_id)
+                await del_user_session(user_id)
+                await del_product_session(user_id)
                 return
 
             text = 'Введите новую цену товара для отслеживания'
-            bot.send_message(chat_id, text, parse_mode='html')
+            await bot.send_message(chat_id, text=text, parse_mode='html')
             user.step += 1
         case 1:
             product.max_price = find_price(message_text)
 
-            current_price = get_product_current_price(user_id, product.marketplace, product.article)
+            current_price = await get_product_current_price(user_id, product.marketplace, product.article)
             if current_price <= product.max_price:
-                markup = types.InlineKeyboardMarkup()
-                button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
-                markup.row(button_menu)
+                markup = InlineKeyboardMarkup(inline_keyboard=[])
+                button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+                markup.inline_keyboard.append([button_menu])
 
                 text = 'Цена товар на данный момент не превышает отслеживаемую цены'
-                bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
+                await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
-                del_user_session(user_id)
-                del_product_session(user_id)
+                await del_user_session(user_id)
+                await del_product_session(user_id)
                 return
 
             user.step += 1
-            processing_input_command_set(user_id, chat_id, message_text)
+            await processing_input_command_set(user_id, chat_id, message_text)
         case 2:
-            set_product_max_price(user_id, product.marketplace, product.article, product.max_price)
+            await set_product_max_price(user_id, product.marketplace, product.article, product.max_price)
 
-            markup = types.InlineKeyboardMarkup()
-            button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
-            markup.row(button_menu)
+            markup = InlineKeyboardMarkup(inline_keyboard=[])
+            button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+            markup.inline_keyboard.append([button_menu])
 
             text = 'Новая цена отслеживания установлена'
-            bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
+            await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
-            del_user_session(user_id)
-            del_product_session(user_id)
+            await del_user_session(user_id)
+            await del_product_session(user_id)

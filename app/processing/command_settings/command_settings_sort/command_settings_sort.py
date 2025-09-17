@@ -1,5 +1,6 @@
-import telebot
-from telebot import types
+import logging
+from aiogram import Bot
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from dotenv import load_dotenv
 import os
@@ -9,25 +10,27 @@ from ....session import get_user_session
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
 
-bot = telebot.TeleBot(API_TOKEN)
+logging.basicConfig(level=logging.INFO)
 
-def processing_command_settings_sort(user_id: int, chat_id: int) -> None:
-    user = get_user_session(user_id)
+bot = Bot(token=API_TOKEN)
 
-    markup = types.InlineKeyboardMarkup()
+async def processing_command_settings_sort(user_id: int, chat_id: int) -> None:
+    user = await get_user_session(user_id)
 
-    button_date = types.InlineKeyboardButton('По дате', callback_data='sort_type_date')
-    markup.row(button_date)
+    markup = InlineKeyboardMarkup(inline_keyboard=[])
 
-    button_current_price = types.InlineKeyboardButton('По текущей цене', callback_data='sort_type_current_price')
-    markup.row(button_current_price)
+    button_date = InlineKeyboardButton(text='По дате', callback_data='sort_type_date')
+    markup.inline_keyboard.append([button_date])
 
-    button_sort_false = types.InlineKeyboardButton('По возрастанию', callback_data='sort_reverse_false')
-    button_sort_true = types.InlineKeyboardButton('По убыванию', callback_data='sort_reverse_true')
-    markup.row(button_sort_false, button_sort_true)
+    button_current_price = InlineKeyboardButton(text='По текущей цене', callback_data='sort_type_current_price')
+    markup.inline_keyboard.append([button_current_price])
 
-    button_menu = types.InlineKeyboardButton('Вернуться к меню', callback_data='menu')
-    markup.row(button_menu)
+    button_sort_false = InlineKeyboardButton(text='По возрастанию', callback_data='sort_reverse_false')
+    button_sort_true = InlineKeyboardButton(text='По убыванию', callback_data='sort_reverse_true')
+    markup.inline_keyboard.append([button_sort_false, button_sort_true])
+
+    button_menu = InlineKeyboardButton(text='Вернуться к меню', callback_data='menu')
+    markup.inline_keyboard.append([button_menu])
 
     text_sort_type: str
     if user.sort_type == 'date':
@@ -45,4 +48,4 @@ def processing_command_settings_sort(user_id: int, chat_id: int) -> None:
         f'Сейчас сортируется по {text_sort_type}, по {text_sort_reverse}\n'
         'Выберите критерий сортировки и порядок сортировки'
     )
-    bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
+    await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)

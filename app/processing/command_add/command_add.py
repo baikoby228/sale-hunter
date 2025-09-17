@@ -1,5 +1,6 @@
-import telebot
-from telebot import types
+import logging
+from aiogram import Bot
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from dotenv import load_dotenv
 import os
@@ -11,20 +12,22 @@ from app.session import create_user_session, create_product_session
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
 
-bot = telebot.TeleBot(API_TOKEN)
+logging.basicConfig(level=logging.INFO)
 
-def processing_command_add(user_id: int, chat_id: int) -> None:
-    if get_products_amount(user_id) == MAX_AMOUNT_OF_PRODUCTS:
+bot = Bot(token=API_TOKEN)
+
+async def processing_command_add(user_id: int, chat_id: int) -> None:
+    if await get_products_amount(user_id) == MAX_AMOUNT_OF_PRODUCTS:
         text = f'Достигнут лимит отслеживаемых товаров ({MAX_AMOUNT_OF_PRODUCTS})'
-        bot.send_message(chat_id, text, parse_mode='html')
+        await bot.send_message(chat_id, text=text, parse_mode='html')
         return
 
-    create_user_session(user_id, chat_id, 'add', -1)
-    create_product_session(user_id)
+    await create_user_session(user_id, chat_id, 'add', -1)
+    await create_product_session(user_id)
 
-    markup = types.InlineKeyboardMarkup(row_width=1)
-    button_wb = types.InlineKeyboardButton('Wildberries', callback_data='add_wb')
-    markup.add(button_wb)
+    markup = InlineKeyboardMarkup(inline_keyboard=[])
+    button_wb = InlineKeyboardButton(text='Wildberries', callback_data='add_wb')
+    markup.inline_keyboard.append([button_wb])
 
     text = 'Выберите маркетплейс для отслеживания товара'
-    bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
+    await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)

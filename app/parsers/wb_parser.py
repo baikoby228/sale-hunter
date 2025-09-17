@@ -1,3 +1,4 @@
+from asyncio import to_thread
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -22,7 +23,10 @@ def save_debug_screenshot(driver, prefix="retry_fail"):
     driver.save_screenshot(path)
     print(f'path - {path}')
 
-def get_html(article) -> str | None:
+async def get_html(article) -> str | None:
+    return await to_thread(_get_html_sync, article)
+
+def _get_html_sync(article) -> str | None:
     url = f'https://www.wildberries.by/catalog/{article}/detail.aspx'
 
     chrome_options = Options()
@@ -83,7 +87,7 @@ def get_html(article) -> str | None:
 
     return driver.page_source
 
-def get_product(html) -> ProductData:
+async def get_product(html) -> ProductData:
     res = ProductData()
 
     soup = BeautifulSoup(html, "lxml")
@@ -116,11 +120,11 @@ def get_product(html) -> ProductData:
 
     return res
 
-def wb_parser(article: int) -> ProductData | None:
-    html = get_html(article)
+async def wb_parser(article: int) -> ProductData | None:
+    html = await get_html(article)
     if not html:
         return None
-    return get_product(html)
+    return await get_product(html)
 
 '''
 if __name__ == "__main__":

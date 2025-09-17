@@ -1,5 +1,6 @@
-import telebot
-from telebot import types
+import logging
+from aiogram import Bot
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from dotenv import load_dotenv
 import os
@@ -12,29 +13,31 @@ from ...session import get_user_session
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
 
-bot = telebot.TeleBot(API_TOKEN)
+logging.basicConfig(level=logging.INFO)
 
-def processing_command_menu(user_id: int, chat_id: int) -> None:
-    user = get_user_session(user_id, chat_id)
+bot = Bot(token=API_TOKEN)
 
-    amount = get_products_amount(user_id)
-    products = get_products(user_id)
+async def processing_command_menu(user_id: int, chat_id: int) -> None:
+    user = await get_user_session(user_id, chat_id)
 
-    markup = types.InlineKeyboardMarkup()
+    amount = await get_products_amount(user_id)
+    products = await get_products(user_id)
 
-    button_settings = types.InlineKeyboardButton('Настройки сортировки', callback_data='settings_sort')
-    markup.row(button_settings)
+    markup = InlineKeyboardMarkup(inline_keyboard=[])
+
+    button_settings = InlineKeyboardButton(text='Настройки сортировки', callback_data='settings_sort')
+    markup.inline_keyboard.append([button_settings])
 
     if len(products) == 0:
-        button_add = types.InlineKeyboardButton('Добавить товар', callback_data='add')
-        markup.row(button_add)
+        button_add = InlineKeyboardButton(text='Добавить товар', callback_data='add')
+        markup.inline_keyboard.append([button_add])
 
     text = (
         f'Меню ({amount}/{MAX_AMOUNT_OF_PRODUCTS})\n'
         '...'
     )
 
-    bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
+    await bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
 
     if user.sort_type == 'date':
         products.sort(key=lambda product: product.add_time, reverse=user.sort_reverse)
@@ -44,22 +47,23 @@ def processing_command_menu(user_id: int, chat_id: int) -> None:
     for i in range(len(products)):
         product = products[i]
 
-        markup = types.InlineKeyboardMarkup()
+        markup = InlineKeyboardMarkup(inline_keyboard=[])
 
-        button_info = types.InlineKeyboardButton(f'{product.marketplace.upper()} - {product.article}', callback_data=f'info_{product.marketplace}_{product.article}')
-        markup.row(button_info)
+        text = f'{product.marketplace.upper()} - {product.article}'
+        button_info = InlineKeyboardButton(text=text, callback_data=f'info_{product.marketplace}_{product.article}')
+        markup.inline_keyboard.append([button_info])
 
         text = 'изменить'
-        button_set = types.InlineKeyboardButton(text, callback_data=f'set_{product.marketplace}_{product.article}')
+        button_set = InlineKeyboardButton(text=text, callback_data=f'set_{product.marketplace}_{product.article}')
 
         text = 'удалить'
-        button_del = types.InlineKeyboardButton(text, callback_data=f'del_{product.marketplace}_{product.article}')
+        button_del = InlineKeyboardButton(text=text, callback_data=f'del_{product.marketplace}_{product.article}')
 
-        markup.row(button_set, button_del)
+        markup.inline_keyboard.append([button_set, button_del])
 
         if i == len(products) - 1 and amount != MAX_AMOUNT_OF_PRODUCTS:
-            button_add = types.InlineKeyboardButton('Добавить товар', callback_data='add')
-            markup.row(button_add)
+            button_add = InlineKeyboardButton(text='Добавить товар', callback_data='add')
+            markup.inline_keyboard.append([button_add])
 
         string_current_price: str
         if product.current_price == INF:
@@ -71,4 +75,4 @@ def processing_command_menu(user_id: int, chat_id: int) -> None:
             f'{product.name[:min(len(product.name), 17)]}...\n'
             f'{format_price_byn(product.max_price)} - {string_current_price}'
         )
-        bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
+        await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
