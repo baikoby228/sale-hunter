@@ -22,14 +22,12 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
 router = Router()
 
-'''
 from test import add_test_products
 @dp.message(Command("test"))
 async def command_test_handler(message: Message) -> None:
     user_id = message.from_user.id
     chat_id = message.chat.id
     await add_test_products(user_id, chat_id)
-'''
 
 @dp.message(Command("start"))
 async def command_start_handler(message: Message) -> None:

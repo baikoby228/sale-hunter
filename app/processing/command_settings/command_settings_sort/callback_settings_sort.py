@@ -20,17 +20,17 @@ async def processing_callback_settings_sort(user_id: int, chat_id: int, callback
     text: str
     if callback_data == 'sort_type_date':
         await user.set_sort_type('date')
-        text = 'Критерий сортировки изменён'
+        text = '✅ Критерий сортировки изменён'
     if callback_data == 'sort_type_current_price':
         await user.set_sort_type('current_price')
-        text = 'Критерий сортировки изменён'
+        text = '✅ Критерий сортировки изменён'
 
     if callback_data == 'sort_reverse_false':
         await user.set_sort_reverse(False)
-        text = 'Порядок сртировки изменён'
+        text = '✅ Порядок сртировки изменён'
     if callback_data == 'sort_reverse_true':
         await user.set_sort_reverse(True)
-        text = 'Порядок сотировки изменён'
+        text = '✅ Порядок сотировки изменён'
 
     await bot.send_message(chat_id, text=text, parse_mode='html')
     await processing_command_settings_sort(user_id, chat_id)

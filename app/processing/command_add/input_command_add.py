@@ -29,7 +29,7 @@ async def processing_input_command_add(user_id: int, chat_id: int, message_text:
             product.article = find_number(message_text)
 
             if await check_product(user_id, product.marketplace, product.article):
-                text = 'Товар с эти артикулом уже отслеживается'
+                text = '❌ Товар с эти артикулом уже отслеживается'
 
                 markup = InlineKeyboardMarkup(inline_keyboard=[])
                 button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
@@ -58,7 +58,7 @@ async def processing_input_command_add(user_id: int, chat_id: int, message_text:
                 button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
-                text = 'Артикул невалиден'
+                text = '❌ Артикул невалиден'
                 await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
                 await del_user_session(user_id)
@@ -75,7 +75,7 @@ async def processing_input_command_add(user_id: int, chat_id: int, message_text:
                 button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
-                text = 'Цена товар на данный момент не превышает отслеживаемую цену'
+                text = '❌ Цена товар на данный момент не превышает отслеживаемую цену'
                 await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
                 await del_user_session(user_id)
@@ -92,7 +92,7 @@ async def processing_input_command_add(user_id: int, chat_id: int, message_text:
             button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
             markup.inline_keyboard.append([button_menu])
 
-            text = 'Товар добавлен в список отслеживаемых'
+            text = '✅ Товар добавлен в список отслеживаемых'
             await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
             await del_user_session(user_id)

@@ -31,7 +31,7 @@ async def processing_input_command_del(user_id: int, chat_id: int, message_text:
                 button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
-                text = 'Товара нету в списке отслеживаемых'
+                text = '❌ Товара нету в списке отслеживаемых'
                 await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
                 await del_user_session(user_id)
@@ -47,7 +47,7 @@ async def processing_input_command_del(user_id: int, chat_id: int, message_text:
             button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
             markup.inline_keyboard.append([button_menu])
 
-            text = 'Товар удалён из списка отслеживаемых'
+            text = '✅ Товар удалён из списка отслеживаемых'
             await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
             await del_user_session(user_id)

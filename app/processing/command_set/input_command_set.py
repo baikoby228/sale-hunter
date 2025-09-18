@@ -31,7 +31,7 @@ async def processing_input_command_set(user_id: int, chat_id: int, message_text:
                 button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
-                text = 'Товара нету в списке отслеживаемых'
+                text = '❌ Товара нету в списке отслеживаемых'
                 await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
                 await del_user_session(user_id)
@@ -50,7 +50,7 @@ async def processing_input_command_set(user_id: int, chat_id: int, message_text:
                 button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
                 markup.inline_keyboard.append([button_menu])
 
-                text = 'Цена товар на данный момент не превышает отслеживаемую цены'
+                text = '❌ Цена товар на данный момент не превышает отслеживаемую цены'
                 await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
                 await del_user_session(user_id)
@@ -66,7 +66,7 @@ async def processing_input_command_set(user_id: int, chat_id: int, message_text:
             button_menu = InlineKeyboardButton(text='🔙 Вернуться к меню', callback_data='menu')
             markup.inline_keyboard.append([button_menu])
 
-            text = 'Новая цена отслеживания установлена'
+            text = '✅ Новая цена отслеживания установлена'
             await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
 
             await del_user_session(user_id)
