@@ -21,6 +21,8 @@ async def processing_command_set(user_id: int, chat_id: int) -> None:
     markup = InlineKeyboardMarkup(inline_keyboard=[])
     button_wb = InlineKeyboardButton(text='🟣 Wildberries 🟣', callback_data='set_wb')
     markup.inline_keyboard.append([button_wb])
+    button_ozon = InlineKeyboardButton(text='🔵 Ozon 🔴', callback_data='set_ozon')
+    markup.inline_keyboard.append([button_ozon])
 
     text = 'Выберите маркетплейс товара, цену которого меняете'
     await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)

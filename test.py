@@ -16,9 +16,9 @@ async def main(article: int) -> None:
     print(f'url = {product.photo_url}')
 
 if __name__ == '__main__':
-    asyncio.run(create_tables())
-    #article = 2415425494
-    #asyncio.run(main(article=article))
+    #asyncio.run(create_tables())
+    article = 2415425494
+    asyncio.run(main(article=article))
 
 async def add_test_products(user_id: int, chat_id: int) -> None:
     product = ProductData(user_id, 'wb', 307819738, '*описание товара*',

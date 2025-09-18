@@ -83,19 +83,19 @@ async def callback_menu_handler(callback: CallbackQuery) -> None:
     chat_id = callback.message.chat.id
     await processing_command_menu(user_id, chat_id)
 
-@dp.callback_query(lambda callback: callback.data in ['add_wb'])
+@dp.callback_query(lambda callback: callback.data in ['add_wb', 'add_ozon'])
 async def callback_add_marketplace_handler(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     chat_id = callback.message.chat.id
     await processing_callback_add_marketplace(user_id, chat_id, callback.data)
 
-@dp.callback_query(lambda callback: callback.data in ['del_wb'])
+@dp.callback_query(lambda callback: callback.data in ['del_wb', 'del_ozon'])
 async def callback_del_marketplace_handler(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     chat_id = callback.message.chat.id
     await processing_callback_del_marketplace(user_id, chat_id, callback.data)
 
-@dp.callback_query(lambda callback: callback.data in ['set_wb'])
+@dp.callback_query(lambda callback: callback.data in ['set_wb', 'set_ozon'])
 async def callback_set_marketplace_handler(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     chat_id = callback.message.chat.id

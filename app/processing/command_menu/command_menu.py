@@ -81,7 +81,7 @@ async def processing_command_menu(user_id: int, chat_id: int) -> None:
             string_current_price = f'{format_price_byn(product.current_price)}'
 
         text = (
-            f'{product.name[:min(len(product.name), 17)]}...\n'
+            f'{product.name[:min(len(product.name), 20)]}...\n'
             f'{format_price_byn(product.max_price)} - {string_current_price}'
         )
         await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)

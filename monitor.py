@@ -4,7 +4,8 @@ import random
 
 from config import CYCLE_TIME, CYCLE_TIME_DELTA,  REQUEST_TIME_DELTA
 from infra import get_products_amount, get_products, set_product_current_price
-from app import wb_parser, send_notification
+from app import wb_parser, send_notification, ozon_parser
+from models import ProductData
 
 async def main():
     print('big_start')
@@ -29,14 +30,18 @@ async def main():
         if (product.marketplace, product.article) in found_prices:
             current_price = found_prices[(product.marketplace, product.article)]
         else:
+            new_product: ProductData
             if product.marketplace == 'wb':
                 new_product = await wb_parser(product.article)
-                if new_product:
-                    current_price = new_product.current_price
-                    found_prices[(product.marketplace, product.article)] = current_price
-                else:
-                    current_price = None
-                    found_prices[(product.marketplace, product.article)] = None
+            if product.marketplace == 'ozon':
+                new_product = await ozon_parser(product.article)
+
+            if new_product:
+                current_price = new_product.current_price
+                found_prices[(product.marketplace, product.article)] = current_price
+            else:
+                current_price = None
+                found_prices[(product.marketplace, product.article)] = None
 
         if current_price is not None:
             await set_product_current_price(product.user_id, product.marketplace, product.article, current_price)

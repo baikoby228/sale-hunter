@@ -1,5 +1,7 @@
 import asyncio
 from asyncio import to_thread
+
+import undetected_chromedriver as uc
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -27,36 +29,42 @@ def save_debug_screenshot(driver, prefix="retry_fail"):
 async def get_html(article) -> str | None:
     return await to_thread(_get_html_sync, article)
 
+def sanitize_cookie(cookie: dict) -> dict:
+    allowed_same_site = {"Strict", "Lax", "None"}
+    filtered = {
+        k: cookie[k]
+        for k in ['name', 'value', 'domain', 'path', 'secure', 'httpOnly']
+        if k in cookie
+    }
+    same_site = cookie.get("sameSite")
+    if same_site in allowed_same_site:
+        filtered["sameSite"] = same_site
+    return filtered
+
 import time
 def _get_html_sync(article) -> str | None:
     url = f'https://ozon.by/product/{article}'
 
     chrome_options = Options()
-    #chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     #chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    chrome_options.add_experimental_option('useAutomationExtension', False)
+    #chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    #chrome_options.add_experimental_option('useAutomationExtension', False)
 
-    user_agent = fake_useragent.UserAgent().random
-    chrome_options.add_argument(f'--user-agent={user_agent}')
+    #user_agent = fake_useragent.UserAgent().random
+    #chrome_options.add_argument(f'--user-agent={user_agent}')
 
-    driver = webdriver.Chrome(options=chrome_options)
+    driver = uc.Chrome(options=chrome_options)
     #driver.maximize_window()
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
     driver.get(url)
+    #time.sleep(10)
 
     wait = WebDriverWait(driver, 10)
-
-    asyncio.sleep(3.9713)
-    '''
-    time.sleep(30)
-    with open("code.txt", "w", encoding="utf-8") as file:
-        file.write(driver.page_source)
-    '''
 
     success = False
     for i in range(MAX_AMOUNT_OF_RETRIES):
@@ -87,7 +95,9 @@ def _get_html_sync(article) -> str | None:
         EC.presence_of_element_located((By.CLASS_NAME, "tsHeadline600Large"))
     ))
 
-    return driver.page_source
+    html = driver.page_source
+    driver.quit()
+    return html
 
 async def get_product(html) -> ProductData:
     res = ProductData()

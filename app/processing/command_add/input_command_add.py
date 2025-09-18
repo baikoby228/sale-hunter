@@ -9,7 +9,7 @@ import os
 from utils import find_number, find_price
 from infra import add_product, check_product
 from ...session import get_user_session, del_user_session, get_product_session, del_product_session
-from ...parsers import wb_parser
+from ...parsers import wb_parser, ozon_parser
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -51,7 +51,10 @@ async def processing_input_command_add(user_id: int, chat_id: int, message_text:
             text = 'Получение данных о товаре...'
             await bot.send_message(chat_id, text=text, parse_mode='html')
 
-            pr = await wb_parser(product.article)
+            if product.marketplace == 'wb':
+                pr = await wb_parser(product.article)
+            if product.marketplace == 'ozon':
+                pr = await ozon_parser(product.article)
 
             if not pr:
                 markup = InlineKeyboardMarkup(inline_keyboard=[])

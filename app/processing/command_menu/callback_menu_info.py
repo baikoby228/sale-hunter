@@ -34,10 +34,10 @@ async def processing_callback_menu_info(user_id: int, chat_id: int, callback_dat
     markup = InlineKeyboardMarkup(inline_keyboard=[])
 
     text = '✏️ Изменить'
-    button_set = InlineKeyboardButton(text=text, callback_data=f'set_wb_{product.article}')
+    button_set = InlineKeyboardButton(text=text, callback_data=f'set_{product.marketplace}_{product.article}')
 
     text = '🗑️ Удалить'
-    button_del = InlineKeyboardButton(text=text, callback_data=f'del_wb_{product.article}')
+    button_del = InlineKeyboardButton(text=text, callback_data=f'del_{product.marketplace}_{product.article}')
 
     markup.inline_keyboard.append([button_set, button_del])
 
