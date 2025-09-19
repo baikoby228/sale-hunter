@@ -19,7 +19,7 @@ async def processing_command_settings(user_id: int, chat_id: int) -> None:
 
     markup = InlineKeyboardMarkup(inline_keyboard=[])
 
-    button_language = InlineKeyboardButton(text='🌐 Язык', callback_data='settings_language')
+    button_language = InlineKeyboardButton(text='🌐 Язык (будет добавлен позже)', callback_data='settings_language')
     markup.inline_keyboard.append([button_language])
 
     button_sort = InlineKeyboardButton(text='📋 Сортировка отслеживаемых товаров', callback_data='settings_sort')
