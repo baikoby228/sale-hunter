@@ -33,8 +33,12 @@ async def processing_command_menu(user_id: int, chat_id: int) -> None:
         markup.inline_keyboard.append([button_add])
 
     text = (
-        f'Меню ({amount}/{MAX_AMOUNT_OF_PRODUCTS})\n'
-        '...'
+        f'<b>МЕНЮ</b> <i>({amount}/{MAX_AMOUNT_OF_PRODUCTS})</i>\n'
+        f'🟣🔵 - Получить данные об отслеживаемом товаре\n'
+        f'✏️ - Изменить отслеживаемую цену товара\n'
+        f'🗑️ - Удалить товар из списка отслеживаемых\n'
+        f'➕ - Добавить товар в список отслеживаемых\n'
+        f'⚙️ - Настроить сортировку списка отслеживаемых товаров'
     )
 
     await bot.send_message(chat_id, text, parse_mode='html', reply_markup=markup)
@@ -81,7 +85,7 @@ async def processing_command_menu(user_id: int, chat_id: int) -> None:
             string_current_price = f'{format_price_byn(product.current_price)}'
 
         text = (
-            f'{product.name[:min(len(product.name), 20)]}...\n'
+            f'{product.name[:min(len(product.name), 20)].strip()}...\n'
             f'{format_price_byn(product.max_price)} - {string_current_price}'
         )
         await bot.send_message(chat_id, text=text, parse_mode='html', reply_markup=markup)
