@@ -59,5 +59,9 @@ async def main():
         await asyncio.sleep(0.97)
     print('end_big_sleep')
 
+async def runner():
+    while True:
+        await main()
+
 if __name__ == '__main__':
-    asyncio.run(main())
+    asyncio.run(runner())

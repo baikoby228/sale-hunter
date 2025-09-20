@@ -21,9 +21,14 @@ if __name__ == '__main__':
     asyncio.run(main(article=article))
 
 async def add_test_products(user_id: int, chat_id: int) -> None:
+    return
     product = ProductData(user_id, 'wb', 307819738, '*описание товара*',
                           'https://basket-05.wbbasket.ru/vol734/part73458/73458197/images/c246x328/1.webp',
-                          12311,  12311, '2025-09-16 10:11', 12310)
+                          15000, 15000, '2025-09-16 10:11', 12000)
+    await add_product(product)
+    product = ProductData(user_id, 'ozon', 1414409777, '*описание товара*',
+                          'https://basket-05.wbbasket.ru/vol734/part73458/73458197/images/c246x328/1.webp',
+                          15000,  15000, '2025-09-16 10:11', 12000)
     await add_product(product)
     product = ProductData(user_id, 'wb', 214960980, '*описание товара*',
                           'https://basket-05.wbbasket.ru/vol734/part73458/73458197/images/c246x328/1.webp',

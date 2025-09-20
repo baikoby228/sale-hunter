@@ -13,20 +13,10 @@ from config import INF, MAX_AMOUNT_OF_RETRIES
 from utils import find_number
 from models import ProductData
 
-import os
-from datetime import datetime
-def save_debug_screenshot(driver, prefix="retry_fail"):
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = f"{prefix}_{timestamp}.png"
-    os.makedirs("screenshots", exist_ok=True)
-    path = os.path.join("screenshots", filename)
-    driver.save_screenshot(path)
-    print(f'path - {path}')
+async def get_html(article: int) -> str | None:
+    return await to_thread(get_html_sync, article)
 
-async def get_html(article) -> str | None:
-    return await to_thread(_get_html_sync, article)
-
-def _get_html_sync(article) -> str | None:
+def get_html_sync(article: int) -> str | None:
     url = f'https://www.wildberries.by/catalog/{article}/detail.aspx'
 
     chrome_options = Options()
@@ -55,7 +45,6 @@ def _get_html_sync(article) -> str | None:
         file.write(driver.page_source)
     '''
 
-    success = False
     for i in range(MAX_AMOUNT_OF_RETRIES):
         try:
             wait.until(EC.any_of(
@@ -63,17 +52,12 @@ def _get_html_sync(article) -> str | None:
                 EC.presence_of_element_located((By.CLASS_NAME, "productTitle--J2W7I")),
                 EC.presence_of_element_located((By.CLASS_NAME, "soldOutProductText--hhsT1"))
             ))
-            success = True
             break
         except TimeoutException:
             driver.refresh()
 
     if driver.find_elements(By.CLASS_NAME, "content404"):
         return None
-
-    if not success:
-        save_debug_screenshot(driver, prefix="element_not_found")
-        raise TimeoutException("Не нашёл")
 
     wait.until(EC.any_of(
         EC.presence_of_element_located((By.CLASS_NAME, "verticalSlide--fBKUm")),

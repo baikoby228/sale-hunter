@@ -26,23 +26,10 @@ def save_debug_screenshot(driver, prefix="retry_fail"):
     driver.save_screenshot(path)
     print(f'path - {path}')
 
-async def get_html(article) -> str | None:
-    return await to_thread(_get_html_sync, article)
+async def get_html(article: int) -> str | None:
+    return await to_thread(get_html_sync, article)
 
-def sanitize_cookie(cookie: dict) -> dict:
-    allowed_same_site = {"Strict", "Lax", "None"}
-    filtered = {
-        k: cookie[k]
-        for k in ['name', 'value', 'domain', 'path', 'secure', 'httpOnly']
-        if k in cookie
-    }
-    same_site = cookie.get("sameSite")
-    if same_site in allowed_same_site:
-        filtered["sameSite"] = same_site
-    return filtered
-
-import time
-def _get_html_sync(article) -> str | None:
+def get_html_sync(article: int) -> str | None:
     url = f'https://ozon.by/product/{article}'
 
     chrome_options = Options()
@@ -99,7 +86,7 @@ def _get_html_sync(article) -> str | None:
     driver.quit()
     return html
 
-async def get_product(html) -> ProductData:
+async def get_product(html: int) -> ProductData:
     res = ProductData()
 
     soup = BeautifulSoup(html, "lxml")
