@@ -1,8 +1,6 @@
-import asyncio
 from asyncio import to_thread
 
 import undetected_chromedriver as uc
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
@@ -16,16 +14,6 @@ from config import INF, MAX_AMOUNT_OF_RETRIES
 from utils import find_number
 from models import ProductData
 
-import os
-from datetime import datetime
-def save_debug_screenshot(driver, prefix="retry_fail"):
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = f"{prefix}_{timestamp}.png"
-    os.makedirs("screenshots", exist_ok=True)
-    path = os.path.join("screenshots", filename)
-    driver.save_screenshot(path)
-    print(f'path - {path}')
-
 async def get_html(article: int) -> str | None:
     return await to_thread(get_html_sync, article)
 
@@ -36,24 +24,19 @@ def get_html_sync(article: int) -> str | None:
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
-    #chrome_options.add_argument("--window-size=1920,1080")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    #chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    #chrome_options.add_experimental_option('useAutomationExtension', False)
 
-    #user_agent = fake_useragent.UserAgent().random
-    #chrome_options.add_argument(f'--user-agent={user_agent}')
+    user_agent = fake_useragent.UserAgent().random
+    chrome_options.add_argument(f'--user-agent={user_agent}')
 
     driver = uc.Chrome(options=chrome_options)
     #driver.maximize_window()
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
     driver.get(url)
-    #time.sleep(10)
 
     wait = WebDriverWait(driver, 10)
 
-    success = False
     for i in range(MAX_AMOUNT_OF_RETRIES):
         try:
             wait.until(EC.any_of(
@@ -61,7 +44,6 @@ def get_html_sync(article: int) -> str | None:
                 EC.presence_of_element_located((By.CLASS_NAME, "tsHeadline550Medium")),
                 EC.presence_of_element_located((By.CLASS_NAME, "tsHeadline600Large"))
             ))
-            success = True
             break
         except TimeoutException:
             driver.refresh()
@@ -69,11 +51,6 @@ def get_html_sync(article: int) -> str | None:
     if driver.find_elements(By.CLASS_NAME, "pdp_bb"):
         return None
 
-    if not success:
-        save_debug_screenshot(driver, prefix="element_not_found")
-        raise TimeoutException("Не нашёл")
-
-    #pdp_v5 pdp_v6 b95_3_1-a
     wait.until(EC.any_of(
         EC.presence_of_element_located((By.CLASS_NAME, "pdp_v6"))
     ))
@@ -84,6 +61,7 @@ def get_html_sync(article: int) -> str | None:
 
     html = driver.page_source
     driver.quit()
+
     return html
 
 async def get_product(html: int) -> ProductData:
