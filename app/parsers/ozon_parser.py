@@ -26,8 +26,8 @@ def get_html_sync(article: int) -> str | None:
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
-    user_agent = fake_useragent.UserAgent().random
-    chrome_options.add_argument(f'--user-agent={user_agent}')
+    #user_agent = fake_useragent.UserAgent().random
+    #chrome_options.add_argument(f'--user-agent={user_agent}')
 
     driver = uc.Chrome(options=chrome_options)
     #driver.maximize_window()
@@ -52,7 +52,7 @@ def get_html_sync(article: int) -> str | None:
         return None
 
     wait.until(EC.any_of(
-        EC.presence_of_element_located((By.CLASS_NAME, "pdp_v6"))
+        EC.presence_of_element_located((By.CLASS_NAME, "pdp_v5"))
     ))
 
     wait.until(EC.any_of(
