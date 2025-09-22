@@ -21,7 +21,12 @@ async def send_notification(product: ProductData) -> None:
     user_id = user.id
     chat_id = user.chat_id
 
-    url = f'https://www.wildberries.by/catalog/{product.article}/detail.aspx'
+    url: str
+    if product.marketplace == 'wb':
+        url = f'https://www.wildberries.by/catalog/{product.article}/detail.aspx'
+    if product.marketplace == 'ozon':
+        url = f'https://ozon.by/product/{product.article}'
+
     text = (
         f'<a href="{url}">Товар</a> упал ниже отслеживаемой цены\n'
         f'<code>{product.article}</code>\n'
