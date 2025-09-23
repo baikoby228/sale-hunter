@@ -1,4 +1,4 @@
-mermaid
+```mermaid
 graph TB
     %% Triggers
     User["User"]
@@ -74,3 +74,4 @@ graph TB
     classDef outbound fill:#E8F5E9,stroke:#43A047,color:#1B5E20
     classDef persistence fill:#FFF3E0,stroke:#FB8C00,color:#E65100
     classDef external fill:#ECEFF1,stroke:#90A4AE,color:#37474F
+```
