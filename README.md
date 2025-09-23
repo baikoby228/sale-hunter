@@ -1,27 +1,24 @@
-# sale-hunter
+# Sale Hunter 🎯
 
-sale-hunter is a Python-based tool designed for monitoring and notifying users about sales and price changes on popular e-commerce platforms such as Ozon and Wildberries (WB). It supports automated scheduling to fetch prices and sends notifications upon detecting relevant updates.
+**sale-hunter** is a powerful Python-based tool designed for monitoring and notifying users about sales and price changes on popular e-commerce platforms such as Ozon and Wildberries (WB). It supports automated scheduling to fetch prices and sends intelligent notifications upon detecting relevant updates.
 
-## Features
+Make sure to view the [Live Demo](https://t.me/sale_hunter_by_bot) 
 
-- Monitor product prices from Ozon and Wildberries via parsers
-- Schedule periodic price checks and notifications
-- Manage user sessions and subscriptions for tailored alerts
-- Bot interface for receiving user commands and delivering notifications
-- Persistent storage through database integration
-- Modular design with separated layers for command processing, business logic, data access, and API parsing
+English| [Русский](./docs/russian-README.md)
 
-## Architecture Overview
+## ✨ Features
 
-The project is structured into several layers:
+- **Multi-platform Monitoring**: Track product prices from Ozon and Wildberries via specialized parsers
+- **Smart Scheduling**: Configure periodic price checks with customizable intervals
+- **Session Management**: Maintain user sessions and personalized subscriptions
+- **Telegram Bot Interface**: Intuitive bot commands for easy interaction
+- **Real-time Notifications**: Instant alerts for price drops and sales
+- **Persistent Storage**: Reliable database integration for data persistence
+- **Modular Architecture**: Clean separation of concerns for maintainability
 
-- **Bot Interface:** Handles user commands and message delivery
-- **Command Processing:** Manages command parsing and session management
-- **Business Logic & Session Management:** Maintains user sessions and notification logic
-- **Parsers:** Interfaces with external APIs (Ozon, WB) to fetch product data
-- **Data Access Layer:** Connects to the database and persists data models
-- **Scheduler:** Triggers routine price checks and updates
-- **Notification Service:** Sends notifications to users based on price changes
+## 🏗 Architecture Overview
+
+The project follows a modular architecture with clearly defined layers:
 
 ```mermaid
 graph TB
@@ -37,35 +34,28 @@ graph TB
  
     %% Bot Layer
     BotInterface["Bot Interface"]:::inbound
-    click BotInterface "https://github.com/baikoby228/sale-hunter/blob/main/bot.py"
  
     %% Command Processing
     subgraph "Command Processing Layer"
         CommandProcessing["app/processing/"]:::inbound
     end
-    click CommandProcessing "https://github.com/baikoby228/sale-hunter/tree/main/app/processing/"
  
     %% Business Logic & Session Management
     subgraph "Business Logic & Session Management"
         SessionManager["Session Manager"]:::persistence
         Notification["Notification Service"]:::outbound
     end
-    click SessionManager "https://github.com/baikoby228/sale-hunter/tree/main/app/session/"
-    click Notification "https://github.com/baikoby228/sale-hunter/blob/main/app/notification.py"
  
     %% Parsers / External APIs
     subgraph "Parsers / External APIs"
         Parsers["Parsers (Ozon, WB)"]:::external
     end
-    click Parsers "https://github.com/baikoby228/sale-hunter/tree/main/app/parsers/"
  
     %% Data Access Layer
     subgraph "Data Access Layer"
         DataAccess["DB Connectors"]:::persistence
         Models["Data Models"]:::persistence
     end
-    click DataAccess "https://github.com/baikoby228/sale-hunter/tree/main/infra/database/"
-    click Models "https://github.com/baikoby228/sale-hunter/tree/main/models/"
  
     %% Database
     Database["Database"]:::persistence
@@ -101,36 +91,108 @@ graph TB
     classDef external fill:#ECEFF1,stroke:#90A4AE,color:#37474F
 ```
 
-## Installation
+### Key Components
 
-1. Clone the repository:
+- **Bot Interface**: Handles user commands and message delivery via Telegram
+- **Command Processing**: Manages command parsing and session management
+- **Business Logic & Session Management**: Maintains user sessions and notification logic
+- **Parsers**: Interfaces with external APIs (Ozon, WB) to fetch product data
+- **Data Access Layer**: Connects to the database and persists data models
+- **Scheduler**: Triggers routine price checks and updates
+- **Notification Service**: Sends notifications to users based on price changes
 
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.8+
+- Telegram Bot Token (from [BotFather](https://t.me/BotFather))
+- Database (SQLite by default, configurable to PostgreSQL)
+
+### Installation
+
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/baikoby228/sale-hunter.git
    cd sale-hunter
    ```
 
-2. Install Python dependencies:
-
+2. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Configure any global constants or credentials as needed in the configuration files.
+3. **Configuration**:
+   Copy the environment template and configure your settings:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your credentials
+   ```
 
-## Usage
+4. **Database Setup**:
+   ```bash
+   python scripts/setup_database.py
+   ```
 
-- Run the bot interface to start receiving user commands.
-- Use the provided session management commands to subscribe or unsubscribe from price alerts.
-- The scheduler will automatically trigger price checks and notifications based on configured intervals.
+### Usage
 
-Refer to the code documentation in the `app/`, `bot.py`, and `app/parsers/` directories for detailed usage and customization.
+1. **Start the bot**:
+   ```bash
+   python bot.py
+   ```
 
-## Contributing
+2. **Interact with the bot**:
+   - Start: `/start` - Initialize your session
+   - Add product: `/add <product_url>` - Monitor a new product
+   - List subscriptions: `/list` - View your monitored products
+   - Remove product: `/remove <product_id>` - Stop monitoring a product
+   - Help: `/help` - Display available commands
 
-Contributions are welcome. Please fork the repository and submit pull requests for any enhancements or bug fixes.
+## 📁 Project Structure
 
-## License
+```
+sale-hunter/
+├── app/
+│   ├── processing/          # Command processing logic
+│   ├── session/            # Session management
+│   ├── parsers/            # Platform-specific parsers
+│   └── notification.py     # Notification service
+├── models/                 # Data models
+├── infra/database/         # Database connectors
+├── docs/                   # Documentation
+├── bot.py                  # Main bot interface
+└── requirements.txt        # Python dependencies
+```
 
-This project is licensed under the AGPL-3.0 License.
+## 🔧 Configuration
+
+Key configuration options in `.env`:
+
+```env
+BOT_TOKEN=your_telegram_bot_token
+DATABASE_URL=sqlite:///sale_hunter.db
+CHECK_INTERVAL=3600  # Price check interval in seconds
+LOG_LEVEL=INFO
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Please feel free to submit issues, feature requests, or pull requests.
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a pull request
+
+## 📄 License
+
+This project is licensed under the AGPL-3.0 License - see the [LICENSE](LICENSE) file for details.
+
+## 🔗 Links
+
+- [Issue Tracker](https://github.com/baikoby228/sale-hunter/issues)
+- [Discussion Forum](https://github.com/baikoby228/sale-hunter/discussions)
+
+
 
